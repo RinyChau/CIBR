@@ -1,5 +1,4 @@
 # import the necessary packages
-# test checkout
 import numpy as np
 import cv2
 
