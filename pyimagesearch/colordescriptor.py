@@ -1,7 +1,7 @@
 # import the necessary packages
 import numpy as np
 import cv2
-
+#haha
 class ColorDescriptor:
 	def __init__(self, bins):
 		# store the number of bins for the 3D histogram
