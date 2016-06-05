@@ -19,7 +19,7 @@ class ImageDB:
                 collection = db.ImageFeature
                 ImageDB.List = list(collection.find())
                 ImageDB.lastUpdateTime = datetime.datetime.now()
-            return ImageDB.Licst
+            return ImageDB.List
         except:
             print("*** ImageDB getList takes error ***")
             print(sys.exc_info()[0])
