@@ -7,6 +7,7 @@ class ImageDB:
     List = None
     lastUpdateTime = None
 
+    @staticmethod
     def getList(force_refresh=False):
         try:
             if ImageDB.lastUpdateTime is not None:
