@@ -24,3 +24,4 @@ class ImageDB:
             print(sys.exc_info()[0])
             traceback.print_exc()
             print("*** ImageDB getList takes error ***")
+            return []
