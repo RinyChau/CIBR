@@ -37,8 +37,8 @@ def search():
             features = cd.describe(query)
 
             # perform the search
-            searcher = Searcher(INDEX)
-            results = searcher.search(features)
+            # searcher = Searcher(INDEX)
+            results = Searcher.search(features)
 
             # loop over the results, displaying the score and image name
             for (score, url) in results:
@@ -50,7 +50,7 @@ def search():
 
         except:
             print(sys.exc_info()[0])
-            traceback.print_stack()
+            traceback.print_exc()
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
