@@ -17,7 +17,7 @@ class ImageDB:
                 client = MongoClient()
                 db = client.CIBR
                 collection = db.ImageFeature
-                ImageDB.List = collection.find()
+                ImageDB.List = collection.find().toArray()
                 ImageDB.lastUpdateTime = datetime.datetime.now()
             return ImageDB.List
         except:
