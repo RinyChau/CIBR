@@ -9,7 +9,7 @@ class Searcher:
         # initialize our dictionary of results
         results = {}
 
-        for image in ImageDB().getList(force_refresh=forceRefresh):
+        for image in ImageDB.getList(force_refresh=forceRefresh):
             features = image["HSVFeature"]
             distance = Searcher.chi2_distance(features, queryFeatures)
             if "ImageUrl" in image:
