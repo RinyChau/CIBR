@@ -1,7 +1,6 @@
 
 import os
-import sys
-import logging
+import sys, traceback
 
 from flask import Flask, render_template, request, jsonify
  
@@ -51,6 +50,7 @@ def search():
 
         except:
             print(sys.exc_info()[0])
+            traceback.print_stack()
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
