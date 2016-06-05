@@ -51,7 +51,6 @@ def search():
         except:
             print(sys.exc_info()[0])
             traceback.print_exc()
-            
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
