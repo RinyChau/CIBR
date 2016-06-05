@@ -1,6 +1,7 @@
 
 import os
- 
+import sys
+
 from flask import Flask, render_template, request, jsonify
  
 from pyimagesearch.colordescriptor import ColorDescriptor
@@ -19,7 +20,7 @@ def index():
 def search():
 
     if request.method == "POST":
-
+        print("accpet search request")
         RESULTS_ARRAY = []
 
         # get url
@@ -50,7 +51,7 @@ def search():
             return jsonify(results=(RESULTS_ARRAY))
 
         except Exception as ex:
-            print("Unexpected error:", ex)
+            print(sys.exc_info()[0])
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
