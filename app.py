@@ -21,9 +21,7 @@ def index():
 def search():
 
     if request.method == "POST":
-        print("accpet search request")
         RESULTS_ARRAY = []
-
         # get url
         image_url = request.form.get('img')
 
@@ -51,8 +49,8 @@ def search():
             # return success
             return jsonify(results=(RESULTS_ARRAY))
 
-        except Exception as ex:
-            logging.debug(sys.exc_info()[0])
+        except:
+            print(sys.exc_info()[0])
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
