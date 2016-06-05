@@ -49,10 +49,10 @@ def search():
             # return success
             return jsonify(results=(RESULTS_ARRAY))
 
-        except:
-
+        except Exception as ex:
+            print("Unexpected error:", ex)
             # return error
-            jsonify({"sorry": "Sorry, no results! Please try again."}), 500
+            return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
 # run!
 if __name__ == '__main__':
