@@ -1,6 +1,7 @@
 
 import os
 import sys
+import logging
 
 from flask import Flask, render_template, request, jsonify
  
@@ -51,7 +52,7 @@ def search():
             return jsonify(results=(RESULTS_ARRAY))
 
         except Exception as ex:
-            print(sys.exc_info()[0])
+            logging.debug(sys.exc_info()[0])
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
