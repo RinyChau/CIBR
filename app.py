@@ -58,4 +58,4 @@ def search():
 
 # run!
 if __name__ == '__main__':
-    app.run('127.0.0.1', debug=True)
+    app.run('0.0.0.0', port=80, debug=True)
