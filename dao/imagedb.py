@@ -9,6 +9,7 @@ class ImageDB:
 
     @staticmethod
     def getList(force_refresh=False):
+        print("!!!!!")
         try:
             if ImageDB.lastUpdateTime is not None:
                 timeDuration = (datetime.datetime.now() - ImageDB.lastUpdateTime).seconds
