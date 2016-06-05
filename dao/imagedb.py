@@ -9,7 +9,6 @@ class ImageDB:
 
     @staticmethod
     def getList(force_refresh=False):
-
         try:
             if ImageDB.lastUpdateTime is not None:
                 timeDuration = (datetime.datetime.now() - ImageDB.lastUpdateTime).seconds
@@ -26,4 +25,4 @@ class ImageDB:
             print(sys.exc_info()[0])
             traceback.print_exc()
             print("*** ImageDB getList takes error ***")
-            return []
+            raise
