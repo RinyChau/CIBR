@@ -8,8 +8,8 @@ class Searcher:
     def search(queryFeatures, limit=10,forceRefresh=False):
         # initialize our dictionary of results
         results = {}
-
-        for image in ImageDB.getList(force_refresh=forceRefresh):
+        imageList = ImageDB.getList(force_refresh=forceRefresh)
+        for image in imageList:
             features = image["HSVFeature"]
             distance = Searcher.chi2_distance(features, queryFeatures)
             if "ImageUrl" in image:

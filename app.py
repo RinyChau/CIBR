@@ -49,8 +49,10 @@ def search():
             return jsonify(results=(RESULTS_ARRAY))
 
         except:
+            print("*** app.search() takes error ***")
             print(sys.exc_info()[0])
             traceback.print_exc()
+            print("*** app.search() takes error ***")
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
