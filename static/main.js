@@ -3,8 +3,8 @@ $("#results-table").hide();
 $("#error").hide();
 
 // global
-var url = 'http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/';
-var data = [];
+//var url = 'http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/';
+//var data = [];
 
 $(function() {
 
@@ -44,7 +44,7 @@ $(function() {
                     // loop through results, append to dom
                     // loop through results, append to dom
                 for (i = 0; i < data.length; i++) {
-                    $("#results").append('<tr><th><a href="' + url + data[i]["image"] + '"><img src="' + url + data[i]["image"] +
+                    $("#results").append('<tr><th><a href="'+ data[i]["image"] + '"><img src="' + data[i]["image"] +
                         '" class="result-img"></a></th><th>' + data[i]['score'] + '</th></tr>')
                 };
                 $("#results-table").show();
@@ -53,7 +53,7 @@ $(function() {
             error: function(error) {
                 console.log(error);
                 // append to dom
-                $("#error").append()
+                $("#error").append(error)
             }
         });
 

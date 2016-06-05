@@ -42,9 +42,9 @@ def search():
             results = searcher.search(features)
 
             # loop over the results, displaying the score and image name
-            for (score, resultID) in results:
+            for (score, url) in results:
                 RESULTS_ARRAY.append(
-                    {"image": str(resultID), "score": str(score)})
+                    {"image": str(url), "score": str(score)})
 
             # return success
             return jsonify(results=(RESULTS_ARRAY))
