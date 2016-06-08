@@ -24,7 +24,7 @@ def search():
         result_array = []
         # get url
         image_url = request.form.get('url')
-        image_file = request.files['img']
+        image_file = request.files['img'] if 'img' in request.files else None
 
         try:
             # initialize the image descriptor
@@ -33,14 +33,14 @@ def search():
             # load the query image and describe it
             from skimage import io
             import cv2
-            if image_file.filename == '':
-                query = io.imread(image_url)
-                query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
-                features = cd.describe(query)
-            else:
+            if image_file is not None and image_file.filename != '':
                 imagePath = ImgManagement.saveFile(img_dir, image_file)
                 image = cv2.imread(imagePath)
                 features = cd.describe(image)
+            else:
+                query = io.imread(image_url)
+                query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
+                features = cd.describe(query)
 
             # perform the search
             # searcher = Searcher(INDEX)
