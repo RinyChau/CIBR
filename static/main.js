@@ -97,7 +97,11 @@ $(function() {
                 console.log(error);
                 // append to dom
                 $("#error").append(error)
-            }
+            },
+            //Options to tell jQuery not to process data or worry about content-type.
+            cache: false,
+            contentType: false,
+            processData: false
         });
     }
 
