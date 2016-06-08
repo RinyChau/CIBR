@@ -35,7 +35,7 @@ $(function() {
             alert("please upload image first or enter the image url");
             return;
         }
-        var formData = new FormData(this);
+        var formData = new FormData($(this)[0]);
         searchImg(formData);
     });
 
