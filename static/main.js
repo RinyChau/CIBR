@@ -35,12 +35,12 @@ $(function() {
             alert("please upload image first or enter the image url");
             return;
         }
-        var formData = new FormData($(this)[0]);
+        var formData = new FormData($("#upload-image")[0]);
         searchImg(formData);
     });
 
     $("#pic-src").change(function () {
-        readURL($("#upload-image")[0]);
+        readURL($(this)[0]);
     });
 
     function isURL(str) {
