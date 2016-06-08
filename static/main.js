@@ -40,7 +40,7 @@ $(function() {
     });
 
     $("#pic-src").change(function () {
-        readURL($(this));
+        readURL($(this)[0]);
     });
 
     function isURL(str) {
