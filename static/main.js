@@ -28,7 +28,7 @@ $(function() {
         // prevent default event
         event.preventDefault();
 
-        var url = $("[name='_id_']").value;
+        var url = $("#pic-url").value;
         var img = $("#pic-src")[0].files;
 
         if (!isURL(url) || (!img || !img[0])) {
@@ -36,7 +36,7 @@ $(function() {
             return;
         }
         var formData = new FormData(this);
-        searchImg(data);
+        searchImg(formData);
     });
 
     $("#pic-src").change(function () {
