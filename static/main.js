@@ -29,7 +29,7 @@ $(function() {
         event.preventDefault();
 
         var url = $("[name='_id_']").value;
-        var img = $("#pic-src").files;
+        var img = $("#pic-src")[0].files;
 
         if (!isURL(url) || (!img || !img[0])) {
             alert("please upload image first or enter the image url");
