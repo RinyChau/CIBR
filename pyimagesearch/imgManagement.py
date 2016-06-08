@@ -12,6 +12,9 @@ class ImgManagement:
         file_name = secure_filename(image_file.filename)
         year = str(datetime.datetime.now().year)
         hour = str(datetime.datetime.now().hour)
-        path = os.path.join(img_dir, year, hour, file_name)
+        dir = os.path.join(img_dir, year, hour)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        path = os.path.join(dir, file_name)
         image_file.save(path)
         return path
