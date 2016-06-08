@@ -11,7 +11,7 @@ from pyimagesearch.imgManagement import ImgManagement
 # create flask instance
 app = Flask(__name__)
 
-img_dir = os.path.join(os.path.dirname(__file__), 'dataset', "upload")
+img_dir = os.path.join(os.path.dirname(__file__), 'image', "upload")
 # main route
 @app.route('/')
 def index():
