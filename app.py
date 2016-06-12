@@ -24,6 +24,7 @@ def search():
         result_array = []
         # get url
         image_url = request.form.get('url')
+        print(image_url)
         image_file = request.files['img'] if 'img' in request.files else None
 
         try:
