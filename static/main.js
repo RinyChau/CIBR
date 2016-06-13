@@ -49,7 +49,7 @@ $(function() {
 
     var uploadImg = true;
     $("#pic-url").change(function () {
-        $('#pic-preview').attr('src', $(this).value());
+        $('#pic-preview').attr('src', this.value);
         uploadImg = false;
     });
 
