@@ -76,33 +76,37 @@ $(function() {
         // show searching text
         $("#searching").show();
         console.log("searching...")
-
-        // ajax request
-        $.ajax({
+        var ajaxParam = {
             type: "POST",
             url: "/search",
             data: data,
             // handle success
-            success: function(result) {
+            success: function (result) {
                 console.log(result.results);
                 var data = result.results;
                 for (i = 0; i < data.length; i++) {
-                    $("#results").append('<tr><th><a href="'+ data[i]["image"] + '"><img src="' + data[i]["image"] +
+                    $("#results").append('<tr><th><a href="' + data[i]["image"] + '"><img src="' + data[i]["image"] +
                         '" class="result-img"></a></th><th>' + data[i]['score'] + '</th></tr>')
-                };
+                }
+                ;
                 $("#results-table").show();
             },
             // handle error
-            error: function(error) {
+            error: function (error) {
                 console.log(error);
                 // append to dom
                 $("#error").append(error)
             },
             //Options to tell jQuery not to process data or worry about content-type.
             cache: false,
-            contentType: false,
-            processData: false
-        });
+        };
+        if (!data.url) {
+            ajaxParam.contentType = false;
+            ajaxParam.processData = false;
+        }
+        //ajax request
+        $.ajax(ajaxParam);
+
     }
 
 });

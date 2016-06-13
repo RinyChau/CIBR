@@ -19,12 +19,11 @@ def index():
 # search route
 @app.route('/search', methods=['POST'])
 def search():
-
     if request.method == "POST":
+        print("os path" + os.path.dirname(__file__))
         result_array = []
         # get url
         image_url = request.form.get('url')
-        print(image_url)
         image_file = request.files['img'] if 'img' in request.files else None
 
         try:
@@ -66,4 +65,3 @@ def search():
 # run!
 if __name__ == '__main__':
     app.run('0.0.0.0', port=80, debug=True)
-    print(os.path.dirname(__file__))
