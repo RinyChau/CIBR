@@ -36,11 +36,21 @@ $(function() {
             return;
         }
         var formData = new FormData($("#upload-image")[0]);
+        if (!uploadImg) {
+            formData.delete("img");
+        }
         searchImg(formData);
     });
 
     $("#pic-src").change(function () {
         readURL($(this)[0]);
+        uploadImg = true;
+    });
+
+    var uploadImg = true;
+    $("#pic-url").change(function () {
+        $('#pic-preview').attr('src', $(this).value());
+        uploadImg = false;
     });
 
     function isURL(str) {
