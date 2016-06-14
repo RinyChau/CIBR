@@ -49,9 +49,12 @@ class ImgManagement:
         try:
             file = urllib.URLopener()
             directory = ImgManagement.getTimeDir(img_dir)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
             path = os.path.join(directory, str(randint(0, 100000000)))
-            while (os.path.isfile(path)):
+            while os.path.isfile(path):
                 path = os.path.join(directory, str(randint(0, 100000000)))
+
             file.retrieve(url, path)
             md5 = ImgManagement.getMD5(path)
             if ImageDB.getItem({"md5": md5}) is not None:
