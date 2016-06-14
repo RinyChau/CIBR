@@ -64,6 +64,7 @@ class ImgManagement:
                 cd = ColorDescriptor((8, 12, 3))
                 features = cd.describe(image)
                 ImageDB.insert(md5, features, path)
+                ImageDB.getList(True)
         except:
             print("*** ImageManagement saveUrl takes error ***")
             print(sys.exc_info()[0])
