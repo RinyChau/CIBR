@@ -23,7 +23,7 @@ class ImgManagement:
         while (os.path.isfile(path)):
             if file_name.rfind('.') >= 0:
                 newFileName = file_name[0:file_name.rfind('.')] + str(randint(0, 1000)) + \
-                              + "." + file_name[file_name.rfind('.') + 1:]
+                              file_name[file_name.rfind('.'):]
             else:
                 newFileName = file_name + str(randint(0, 1000))
             path = os.path.join(directory, newFileName)
