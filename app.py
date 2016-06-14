@@ -7,12 +7,17 @@ from dao.imagedb import ImageDB
 from pyimagesearch.colordescriptor import ColorDescriptor
 from pyimagesearch.searcher import Searcher
 from pyimagestore.imgManagement import ImgManagement
+from skimage import io
+import cv2
 import thread
 # create flask instance
 app = Flask(__name__)
 
 img_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "upload")
-img_url_dir = os.path.join(os.path.dirname(__file__), 'image', "url")
+img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
+# initialize the image descriptor
+cd = ColorDescriptor((8, 12, 3))
+
 # main route
 @app.route('/')
 def index():
@@ -27,36 +32,11 @@ def search():
         image_file = request.files['img'] if 'img' in request.files else None
 
         try:
-            # initialize the image descriptor
-            cd = ColorDescriptor((8, 12, 3))
-
             # load the query image and describe it
-            from skimage import io
-            import cv2
             if image_file is not None and image_file.filename != '':
-                imagePath = ImgManagement.saveFile(img_dir, image_file)
-                imgMD5 = ImgManagement.getMD5(imagePath)
-                imageItem = ImageDB.getItem({"md5": imgMD5})
-                if imageItem is None:
-                    image = cv2.imread(imagePath)
-                    features = cd.describe(image)
-                    # searcher = Searcher(INDEX)
-                    results = Searcher.search(features)
-                    thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
-                else:
-                    features = imageItem['HSVFeature']
-                    # searcher = Searcher(INDEX)
-                    results = Searcher.search(features)
-                    thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
+                results = searchImgByFile(image_file)
             else:
-                query = io.imread(image_url)
-                query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
-                features = cd.describe(query)
-                # searcher = Searcher(INDEX)
-                results = Searcher.search(features)
-                thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
-            # perform the search
-
+                results = searchImgByUrl(image_url)
 
             # loop over the results, displaying the score and image name
             for (score, url) in results:
@@ -73,6 +53,30 @@ def search():
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
+
+def searchImgByFile(image_file):
+    imagePath = ImgManagement.saveFile(img_dir, image_file)
+    imgMD5 = ImgManagement.getMD5(imagePath)
+    imageItem = ImageDB.getItem({"md5": imgMD5})
+    if imageItem is None:
+        image = cv2.imread(imagePath)
+        features = cd.describe(image)
+        results = Searcher.search(features)
+        thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
+    else:
+        features = imageItem['HSVFeature']
+        results = Searcher.search(features)
+        thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
+    return results
+
+
+def searchImgByUrl(image_url):
+    query = io.imread(image_url)
+    query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
+    features = cd.describe(query)
+    results = Searcher.search(features)
+    thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
+    return results
 
 # run!
 if __name__ == '__main__':
