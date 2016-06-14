@@ -7,7 +7,7 @@ collection = db.ImageFeature
 imgList = list(collection.find())
 for img in imgList:
     if "Path" in img and "offer-acceptance-1" in img["Path"]:
-        result = collection.detele_one(img)
+        result = collection.delete_one({"Path": img["Path"]})
         print("count: " + str(result.deleted_count))
 
         # if "ImageUrl" in img:
