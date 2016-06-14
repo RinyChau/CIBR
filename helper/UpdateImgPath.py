@@ -6,7 +6,7 @@ db = client.CIBR
 collection = db.ImageFeature
 imgList = list(collection.find())
 for img in imgList:
-    if "Path" in img and "offer-acceptance-1" in img["Path"]:
+    if "Path" in img and "offer-acceptance" in img["Path"]:
         result = collection.delete_one({"Path": img["Path"]})
         print("count: " + str(result.deleted_count))
 
