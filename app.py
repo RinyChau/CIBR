@@ -40,18 +40,23 @@ def search():
                 if imageItem is None:
                     image = cv2.imread(imagePath)
                     features = cd.describe(image)
+                    # searcher = Searcher(INDEX)
+                    results = Searcher.search(features)
                     thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
                 else:
                     features = imageItem['HSVFeature']
+                    # searcher = Searcher(INDEX)
+                    results = Searcher.search(features)
                     thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
             else:
                 query = io.imread(image_url)
                 query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
                 features = cd.describe(query)
+                # searcher = Searcher(INDEX)
+                results = Searcher.search(features)
                 thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
             # perform the search
-            # searcher = Searcher(INDEX)
-            results = Searcher.search(features)
+
 
             # loop over the results, displaying the score and image name
             for (score, url) in results:
