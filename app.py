@@ -1,17 +1,18 @@
-
 import os
-import sys, traceback
-import datetime
+import sys
+import traceback
+
 from flask import Flask, render_template, request, jsonify
-from werkzeug.utils import secure_filename
+from dao.imagedb import ImageDB
 from pyimagesearch.colordescriptor import ColorDescriptor
 from pyimagesearch.searcher import Searcher
-from pyimagesearch.imgManagement import ImgManagement
-
+from pyimagestore.imgManagement import ImgManagement
+import thread
 # create flask instance
 app = Flask(__name__)
 
 img_dir = os.path.join(os.path.dirname(__file__), 'image', "upload")
+img_url_dir = os.path.join(os.path.dirname(__file__), 'image', "url")
 # main route
 @app.route('/')
 def index():
@@ -35,13 +36,20 @@ def search():
             import cv2
             if image_file is not None and image_file.filename != '':
                 imagePath = ImgManagement.saveFile(img_dir, image_file)
-                image = cv2.imread(imagePath)
-                features = cd.describe(image)
+                imgMD5 = ImgManagement.getMD5(imagePath)
+                imageItem = ImageDB.getItem({"md5": imgMD5})
+                if imageItem is None:
+                    image = cv2.imread(imagePath)
+                    features = cd.describe(image)
+                    thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
+                else:
+                    features = imageItem['HSVFeature']
+                    thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
             else:
                 query = io.imread(image_url)
                 query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
                 features = cd.describe(query)
-
+                thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
             # perform the search
             # searcher = Searcher(INDEX)
             results = Searcher.search(features)

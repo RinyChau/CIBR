@@ -6,18 +6,17 @@ import sys, traceback
 class ImageDB:
     List = None
     lastUpdateTime = None
-
+    client = MongoClient()
+    db = client.CIBR
+    collection = db.ImageFeature
     @staticmethod
     def getList(force_refresh=False):
         try:
             if ImageDB.lastUpdateTime is not None:
                 timeDuration = (datetime.datetime.now() - ImageDB.lastUpdateTime).seconds
-            tenMinutes = 600
+            tenMinutes = 30
             if ImageDB.lastUpdateTime is None or timeDuration > tenMinutes or force_refresh:
-                client = MongoClient()
-                db = client.CIBR
-                collection = db.ImageFeature
-                ImageDB.List = list(collection.find())
+                ImageDB.List = list(ImageDB.collection.find())
                 ImageDB.lastUpdateTime = datetime.datetime.now()
             return ImageDB.List
         except:
@@ -26,3 +25,31 @@ class ImageDB:
             traceback.print_exc()
             print("*** ImageDB getList takes error ***")
             raise
+
+    @staticmethod
+    def getItem(param, force_refresh=False):
+        item = ImageDB.collection.find_one(param)
+        return item
+
+    @staticmethod
+    def insert(md5, features, path=None, url=None):
+        try:
+            imgObj = {}
+            imgObj["ImageName"] = path[path.rfind("/") + 1:]
+            imgObj['HSVFeature'] = [x.item() for x in features]
+            imgObj["md5"] = md5
+            imgObj["CreateTime"] = datetime.datetime.utcnow()
+            imgObj["UpdateTime"] = datetime.datetime.utcnow()
+            if path is None and url is None:
+                raise Exception("path and url can not be None")
+            if path is not None:
+                imgObj["Path"] = "/" + path
+            if url is not None:
+                imgObj["ImageUrl"] = url
+            ImageDB.collection.insert_one(imgObj)
+            ImageDB.getList(True)
+        except:
+            print("*** ImageDB insert takes error ***")
+            print(sys.exc_info()[0])
+            traceback.print_exc()
+            print("*** ImageDB insert takes error ***")

@@ -28,7 +28,7 @@ $(function() {
         // prevent default event
         event.preventDefault();
 
-        var url = $("#pic-url").value;
+        var url = $("#pic-url").val();
         var img = $("#pic-src")[0].files;
 
         if (!isURL(url) || (!img || !img[0])) {
