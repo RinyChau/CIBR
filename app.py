@@ -21,7 +21,6 @@ def index():
 @app.route('/search', methods=['POST'])
 def search():
     if request.method == "POST":
-        print("os path" + os.path.dirname(__file__))
         result_array = []
         # get url
         image_url = request.form.get('url')
