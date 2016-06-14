@@ -6,9 +6,13 @@ db = client.CIBR
 collection = db.ImageFeature
 imgList = list(collection.find())
 for img in imgList:
-    if "ImageUrl" in img:
-        del img["Path"]
-    else:
-        img["Path"] = img["Path"].replace('app', 'static')
-        print(img)
-    collection.replace_one({'_id': img['_id']}, img)
+    if "Path" in img and "offer-acceptance-1" in img["Path"]:
+        result = collection.detele_one(img)
+        print("count: " + str(result.deleted_count))
+
+        # if "ImageUrl" in img:
+        #     del img["Path"]
+        # else:
+        #     img["Path"] = img["Path"].replace('app', 'static')
+        #     print(img)
+        # collection.replace_one({'_id': img['_id']}, img)
