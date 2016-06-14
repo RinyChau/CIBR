@@ -11,4 +11,4 @@ for img in imgList:
     else:
         img["Path"] = img["Path"].replace('app', 'static')
         print(img)
-    collection.replace_one(img)
+    collection.replace_one({'_id': img['_id']}, img)
