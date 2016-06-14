@@ -11,7 +11,7 @@ import thread
 # create flask instance
 app = Flask(__name__)
 
-img_dir = os.path.join(os.path.dirname(__file__), 'image', "upload")
+img_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "upload")
 img_url_dir = os.path.join(os.path.dirname(__file__), 'image', "url")
 # main route
 @app.route('/')

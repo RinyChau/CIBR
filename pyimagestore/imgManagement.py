@@ -21,7 +21,12 @@ class ImgManagement:
             os.makedirs(directory)
         path = os.path.join(directory, file_name)
         while (os.path.isfile(path)):
-            path = os.path.join(directory, file_name + str(randint(0, 1000)))
+            if file_name.rfind('.') >= 0:
+                newFileName = file_name[0:file_name.rfind('.')] + str(randint(0, 1000)) + \
+                              + "." + file_name[file_name.rfind('.') + 1:]
+            else:
+                newFileName = file_name + str(randint(0, 1000))
+            path = os.path.join(directory, newFileName)
         image_file.save(path)
         print("save file" + path)
         return path
@@ -37,6 +42,7 @@ class ImgManagement:
     @staticmethod
     def deleteFile(path):
         os.remove(path)
+        print("remove duplicate file : " + path)
 
     @staticmethod
     def saveUrl(url, img_dir):

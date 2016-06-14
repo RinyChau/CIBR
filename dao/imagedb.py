@@ -43,11 +43,13 @@ class ImageDB:
             if path is None and url is None:
                 raise Exception("path and url can not be None")
             if path is not None:
-                imgObj["Path"] = "/" + path
+                imgObj["Path"] = "/" + path.replace('app/', '', 1)
             if url is not None:
                 imgObj["ImageUrl"] = url
             ImageDB.collection.insert_one(imgObj)
             ImageDB.getList(True)
+            del imgObj['HSVFeature']
+            print("insert new img item: " + str(imgObj))
         except:
             print("*** ImageDB insert takes error ***")
             print(sys.exc_info()[0])
