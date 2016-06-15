@@ -30,7 +30,14 @@ $(function() {
 
         var url = $("#pic-url").val();
         var img = $("#pic-src")[0].files;
-
+        if (uploadImg && (!img || !img[0])) {
+            alert("please upload image first or enter the image url");
+            return;
+        }
+        if (!uploadImg && !isURL(url)) {
+            alert("please upload image first or enter the image url");
+            return;
+        }
         if (!isURL(url) && (!img || !img[0])) {
             alert("please upload image first or enter the image url");
             return;
