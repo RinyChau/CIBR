@@ -108,7 +108,7 @@ class ColorDescriptor:
                     dis_sum = sum(dis_his)
                     dis_his = np.array(dis_his) / dis_sum
                     hist += dis_his
-        hist /= countl
+        hist /= count
         return hist
 
     def getSegements(self, image):
