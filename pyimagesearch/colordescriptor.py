@@ -13,7 +13,7 @@ class ColorDescriptor:
         u_interval = int(200 / self.luv_repre_num)
         (l, u, v) = (int(l_interval / 2), int(u_interval / 2), int(u_interval / 2))
         for i in range(0, self.luv_repre_num):
-            self.luv_repre_colors.append((l + l_interval * i, u + u_interval * i, u + u_interval * i))
+            self.luv_repre_colors.append(np.array((l + l_interval * i, u + u_interval * i, u + u_interval * i)))
 
     def describe(self, image):
         # convert the image to the HSV color space and initialize
@@ -101,7 +101,7 @@ class ColorDescriptor:
             for y in range(start_y, end_y):
                 if corner_mask[x][y] > 0:
                     count += 1
-                    luv = (image[x][y][0], image[x][y][1], image[x][y][2])
+                    luv = np.array((image[x][y][0], image[x][y][1], image[x][y][2]))
                     dis_his = []
                     for repre_luv in self.luv_repre_colors:
                         dis_his.append(1 / np.linalg.norm(luv - repre_luv))
