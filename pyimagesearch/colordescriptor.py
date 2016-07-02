@@ -4,11 +4,10 @@ import cv2
 
 
 class ColorDescriptor:
-    def __init__(self, bins, luv_repre_num=None):
+    def __init__(self, bins, luv_repre_num=10):
         # store the number of bins for the 3D histogram
         self.bins = bins
-        if luv_repre_num is None:
-            self.luv_repre_num = 10
+        self.luv_repre_num = luv_repre_num
         self.luv_repre_colors = []
         l_interval = int(100 / self.luv_repre_num)
         u_interval = int(200 / self.luv_repre_num)
