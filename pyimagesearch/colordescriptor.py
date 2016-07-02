@@ -94,7 +94,8 @@ class ColorDescriptor:
         hist = self.luv_pw_historgram(image, ellipse_mask, (0, w, 0, h))
         features.extend(hist)
 
-    def luv_pw_historgram(self, image, corner_mask, (start_x, end_x, start_y, end_y)):
+    def luv_pw_historgram(self, image, corner_mask, region):
+        (start_x, end_x, start_y, end_y) = region
         hist = np.zeros(1, self.luv_repre_num)
         count = 0
         for x in range(start_x, end_x):
