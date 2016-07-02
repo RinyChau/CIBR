@@ -91,6 +91,7 @@ class ColorDescriptor:
         (h, w) = image.shape[:2]
         hist = self.luv_pw_historgram(image, ellipse_mask, (0, w, 0, h))
         features.extend(hist)
+        return features
 
     def luv_pw_historgram(self, image, corner_mask, region):
         (start_x, end_x, start_y, end_y) = region
@@ -107,7 +108,7 @@ class ColorDescriptor:
                     dis_sum = sum(dis_his)
                     dis_his = np.array(dis_his) / dis_sum
                     hist += dis_his
-        hist /= count
+        cv2.normalize(hist, hist)
         return hist
 
     def getSegements(self, image):
