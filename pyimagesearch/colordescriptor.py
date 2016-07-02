@@ -104,7 +104,7 @@ class ColorDescriptor:
                     luv = (image[x][y][0], image[x][y][1], image[x][y][2])
                     dis_his = []
                     for repre_luv in self.luv_repre_colors:
-                        dis_his.append(1 / np.linalg.norm(luv, repre_luv))
+                        dis_his.append(1 / np.linalg.norm(luv - repre_luv))
                     dis_sum = sum(dis_his)
                     dis_his = np.array(dis_his) / dis_sum
                     hist += dis_his
