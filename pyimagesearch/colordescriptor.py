@@ -95,7 +95,7 @@ class ColorDescriptor:
 
     def luv_pw_historgram(self, image, corner_mask, region):
         (start_x, end_x, start_y, end_y) = region
-        hist = np.zeros((1, self.luv_repre_num))
+        hist = np.zeros(self.luv_repre_num)
         count = 0
         for y in range(start_x, end_x):
             for x in range(start_y, end_y):
@@ -108,7 +108,9 @@ class ColorDescriptor:
                     dis_sum = sum(dis_his)
                     dis_his = np.array(dis_his) / dis_sum
                     hist += dis_his
+        hist = hist
         cv2.normalize(hist, hist)
+        hist = hist.tolist()
         return hist
 
     def getSegements(self, image):

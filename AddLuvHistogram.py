@@ -29,5 +29,6 @@ for imgItem in imgList:
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     else:
         image = cv2.imread("." + image["Path"])
-    imgItem["LUVFeature"] = [x.item() for x in cd.describe_luv(image)]
+    luv_feature = cd.describe_luv(image)
+    imgItem["LUVFeature"] =  luv_feature
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
