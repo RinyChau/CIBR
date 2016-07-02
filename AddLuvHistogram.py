@@ -2,7 +2,7 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 import cv2
 import hashlib
 from pymongo import MongoClient
-import io
+from skimage import io
 
 
 def md5(fname):
