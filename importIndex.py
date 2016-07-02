@@ -25,7 +25,7 @@ ap.add_argument("-u", "--url", required = False,
 args = vars(ap.parse_args())
 
 # initialize mongodb client
-client = MongoClient()
+client = MongoClient("127.0.0.1:5988")
 
 # Content-based image retrieval database
 db = client.CIBR

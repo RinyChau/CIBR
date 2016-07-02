@@ -6,7 +6,7 @@ import sys, traceback
 class ImageDB:
     List = None
     lastUpdateTime = None
-    client = MongoClient()
+    client = MongoClient("127.0.0.1:5988")
     db = client.CIBR
     collection = db.ImageFeature
     @staticmethod
