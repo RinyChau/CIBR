@@ -8,12 +8,12 @@ class ColorDescriptor:
         # store the number of bins for the 3D histogram
         self.bins = bins
         if luv_repre_num is None:
-            luv_repre_num = 10
+            self.luv_repre_num = 10
         self.luv_repre_colors = []
-        l_interval = int(100 / luv_repre_num)
-        u_interval = int(200 / luv_repre_num)
+        l_interval = int(100 / self.luv_repre_num)
+        u_interval = int(200 / self.luv_repre_num)
         (l, u, v) = (int(l_interval / 2), int(u_interval / 2), int(u_interval / 2))
-        for i in range(0, luv_repre_num):
+        for i in range(0, self.luv_repre_num):
             self.luv_repre_colors.append((l + l_interval * i, u + u_interval * i, u + u_interval * i))
 
     def describe(self, image):
