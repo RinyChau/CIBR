@@ -69,7 +69,6 @@ class ColorDescriptor:
         return hist
 
     def describe_luv(self, image):
-
         image = cv2.cvtColor(image, cv2.COLOR_BGR2LUV)
         segments = self.getSegements(image)
         ellipse_mask = self.getEllipticalMask(image)
@@ -80,8 +79,11 @@ class ColorDescriptor:
             # construct a mask for each corner of the image, subtracting
             # the elliptical center from it
             corner_mask = np.zeros(image.shape[:2], dtype="uint8")
+            print(corner_mask.shape)
             cv2.rectangle(corner_mask, (startX, startY), (endX, endY), 255, -1)
             corner_mask = cv2.subtract(corner_mask, ellipse_mask)
+            print(corner_mask.shape)
+            print("img shape" + str(image.shape))
             # extract a color histogram from the image, then update the
             # feature vector
             hist = self.luv_pw_historgram(image, corner_mask, (startX, endX, startY, endY))
@@ -95,7 +97,6 @@ class ColorDescriptor:
 
     def luv_pw_historgram(self, image, corner_mask, region):
         (start_x, end_x, start_y, end_y) = region
-        print(region)
         hist = np.zeros((1, self.luv_repre_num))
         count = 0
         for x in range(start_x, end_x):
