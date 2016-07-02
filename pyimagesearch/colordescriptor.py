@@ -95,6 +95,7 @@ class ColorDescriptor:
 
     def luv_pw_historgram(self, image, corner_mask, region):
         (start_x, end_x, start_y, end_y) = region
+        print region
         hist = np.zeros((1, self.luv_repre_num))
         count = 0
         for x in range(start_x, end_x):
