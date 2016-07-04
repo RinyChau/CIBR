@@ -93,7 +93,7 @@ class ColorDescriptor:
         features.extend(hist)
         return features
 
-    def luv_pw_historgram(self, image, corner_mask, region):
+    def luv_pw_historgram(self, image, corner_mask, region, eps=1e-10):
         (start_x, end_x, start_y, end_y) = region
         hist = np.zeros(self.luv_repre_num)
         count = 0
@@ -104,7 +104,7 @@ class ColorDescriptor:
                     luv = np.array((image[x][y][0], image[x][y][1], image[x][y][2]))
                     dis_his = []
                     for repre_luv in self.luv_repre_colors:
-                        dis_his.append(1 / np.linalg.norm(luv - repre_luv))
+                        dis_his.append(1 / np.linalg.norm(luv - repre_luv) + eps)
                     dis_sum = sum(dis_his)
                     dis_his = np.array(dis_his) / dis_sum
                     hist += dis_his

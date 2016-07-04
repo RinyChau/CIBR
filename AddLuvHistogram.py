@@ -3,6 +3,8 @@ import cv2
 import hashlib
 from pymongo import MongoClient
 from skimage import io
+import time
+
 
 
 def md5(fname):
@@ -22,7 +24,8 @@ collection = db.ImageFeature
 imgList = list(collection.find())
 
 cd = ColorDescriptor((8, 12, 3), 10)
-
+count = 0
+start_time = time.time()
 for imgItem in imgList:
     if "ImageUrl" in imgItem:
         image = io.imread(imgItem["ImageUrl"])
@@ -32,3 +35,6 @@ for imgItem in imgList:
     luv_feature = cd.describe_luv(image)
     imgItem["LUVFeature"] =  luv_feature
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+    count += 1
+    print(count)
+print("--- %s seconds ---" % (time.time() - start_time))
