@@ -71,7 +71,7 @@ class ColorDescriptor:
     def describe_luv(self, image):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2LUV)
         segments = self.getSegements(image)
-        ellipse_mask = self.getEllipticalMask(image)
+        center = self.getCenterMask(image)
 
         features = []
         # loop over the segments
@@ -79,38 +79,37 @@ class ColorDescriptor:
             # construct a mask for each corner of the image, subtracting
             # the elliptical center from it
             corner_mask = np.zeros(image.shape[:2], dtype="uint8")
-            cv2.rectangle(corner_mask, (startX, startY), (endX, endY), 255, -1)
-            corner_mask = cv2.subtract(corner_mask, ellipse_mask)
+            cv2.rectangle(corner_mask, (startX, startY), (endX, endY), 1, -1)
+            corner_mask = cv2.subtract(corner_mask, center["mask"])
             # extract a color histogram from the image, then update the
             # feature vector
-            hist = self.luv_pw_historgram(image, corner_mask, (startX, endX, startY, endY))
+            hist = self.luv_pw_historgram(image, {"region": (startX, startY, endX, endY), "mask": corner_mask})
             features.extend(hist)
 
         # extract a color histogram from the elliptical region and
         # update the feature vector
-        (h, w) = image.shape[:2]
-        hist = self.luv_pw_historgram(image, ellipse_mask, (0, w, 0, h))
+        # (h, w) = image.shape[:2]
+        hist = self.luv_pw_historgram(image, center)
         features.extend(hist)
         return features
 
-    def luv_pw_historgram(self, image, corner_mask, region, eps=1e-10):
-        (start_x, end_x, start_y, end_y) = region
-        hist = np.zeros(self.luv_repre_num)
-        count = 0
-        for y in range(start_x, end_x):
-            for x in range(start_y, end_y):
-                if corner_mask[x][y] > 0:
-                    count += 1
-                    luv = np.array((image[x][y][0], image[x][y][1], image[x][y][2]))
-                    dis_his = []
-                    for repre_luv in self.luv_repre_colors:
-                        dis_his.append(1 / np.linalg.norm(luv - repre_luv) + eps)
-                    dis_sum = sum(dis_his)
-                    dis_his = np.array(dis_his) / dis_sum
-                    hist += dis_his
-        hist = hist
-        cv2.normalize(hist, hist)
-        hist = hist.tolist()
+    def luv_pw_historgram(self, image, maskObj, eps=1e-10):
+        (startX, startY, endX, endY) = maskObj["region"]
+        mask = maskObj["mask"]
+        image = image[startY:endY, startX:endX, :]
+        mask = mask[startY:endY, startX:endX]
+        count = mask.sum()
+        dis_repre_array = []
+        inverse_dis_sum = np.zeros(image.shape[:2])
+        for repre_luv in self.luv_repre_colors:
+            dis_repre = (image - repre_luv)
+            dis_repre = (1 / (np.sqrt((dis_repre ** 2).sum(axis=2)) + eps))
+            dis_repre_array.append(dis_repre)
+            inverse_dis_sum += dis_repre
+
+        hist = []
+        for i in range(0, len(dis_repre_array)):
+            hist.append(((dis_repre_array[i] / inverse_dis_sum) * mask).sum() / count)
         return hist
 
     def getSegements(self, image):
@@ -133,3 +132,10 @@ class ColorDescriptor:
         ellipMask = np.zeros(image.shape[:2], dtype="uint8")
         cv2.ellipse(ellipMask, (cX, cY), (axesX, axesY), 0, 0, 360, 255, -1)
         return ellipMask
+
+    def getCenterMask(self, image):
+        (h, w) = image.shape[:2]
+        (startX, startY, endX, endY) = (int(w * 0.25), int(h * 0.25), int(w * 0.75), int(h * 0.75))
+        corner_mask = np.zeros(image.shape[:2], dtype="uint8")
+        cv2.rectangle(corner_mask, (startX, startY), (endX, endY), 1, -1)
+        return {"region": (startX, startY, endX, endY), "mask": corner_mask}
