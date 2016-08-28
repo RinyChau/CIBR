@@ -6,7 +6,6 @@ from skimage import io
 import time
 
 
-
 def md5(fname):
     hash_md5 = hashlib.md5()
     with open(fname, "rb") as f:
@@ -35,17 +34,17 @@ for imgItem in imgList:
         except:
             print("unable to fetch image:%s", imgItem["ImageUrl"])
 
-    if image == None and "Path" in imgItem:
+    if image is None and "Path" in imgItem:
         try:
             image = cv2.imread("." + imgItem["Path"])
         except:
             print("unable to fetch image:%s", imgItem["Path"])
 
-    if image == None and "Path" not in imgItem and "ImageUrl" not in imgItem:
+    if image is None and "Path" not in imgItem and "ImageUrl" not in imgItem:
         print("unable to fetch image:%s", imgItem)
 
     luv_feature = cd.describe_luv(image)
-    imgItem["LUVFeature"] =  luv_feature
+    imgItem["LUVFeature"] = luv_feature
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
     if count % 100 == 0:
