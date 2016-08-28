@@ -43,6 +43,9 @@ for imgItem in imgList:
     if image is None and "Path" not in imgItem and "ImageUrl" not in imgItem:
         print("unable to fetch image:%s", imgItem)
         continue
+    if image is None:
+        continue
+
     luv_feature = cd.describe_luv(image)
     imgItem["LUVFeature"] = luv_feature
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
