@@ -27,14 +27,29 @@ cd = ColorDescriptor((8, 12, 3), 10)
 count = 0
 start_time = time.time()
 for imgItem in imgList:
+    image = None
     if "ImageUrl" in imgItem:
-        image = io.imread(imgItem["ImageUrl"])
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    else:
-        image = cv2.imread("." + image["Path"])
+        try:
+            image = io.imread(imgItem["ImageUrl"])
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        except:
+            print("unable to fetch image:%s", imgItem["ImageUrl"])
+
+    if image == None and "Path" in imgItem:
+        try:
+            image = cv2.imread("." + imgItem["Path"])
+        except:
+            print("unable to fetch image:%s", imgItem["Path"])
+
+    if image == None and "Path" not in imgItem and "ImageUrl" not in imgItem:
+        print("unable to fetch image:%s", imgItem)
+
     luv_feature = cd.describe_luv(image)
     imgItem["LUVFeature"] =  luv_feature
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
-    print(count)
+    if count % 100 == 0:
+        print(count)
+        print("--- %s seconds ---" % (time.time() - start_time))
+print(count)
 print("--- %s seconds ---" % (time.time() - start_time))
