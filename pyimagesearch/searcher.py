@@ -46,4 +46,4 @@ class Searcher:
 
     @staticmethod
     def l1_distance(histA, histB):
-        d = abs(histA - histB).sum()
+        d = np.sum([abs(a - b) for (a, b) in zip(histA, histB)])
