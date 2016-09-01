@@ -16,7 +16,7 @@ class ColorDescriptor:
         self.bins = bins
         self.luv_repre_num = luv_repre_num
         self.luv_repre_colors = []
-        self.feature = Feature
+        self.feature = feature
         l_interval = int(100 / self.luv_repre_num)
         u_interval = int(200 / self.luv_repre_num)
         (l, u, v) = (int(l_interval / 2), int(u_interval / 2), int(u_interval / 2))
