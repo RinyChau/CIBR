@@ -21,9 +21,10 @@ img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
 
 # initialize the image descriptor
 feature = Feature.LUV
+distance_type = DistanceType.L1
 cd = ColorDescriptor(feature=feature)
 # initialize the searcher
-searcher = Searcher(DistanceType.CHISQUARE, feature)
+searcher = Searcher(DistanceType.L1, feature)
 
 # main route
 @app.route('/')

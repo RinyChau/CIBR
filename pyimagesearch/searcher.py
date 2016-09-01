@@ -4,8 +4,11 @@ from dao.imagedb import ImageDB
 from enum import Enum
 from colordescriptor import Feature
 
-DistanceType = Enum('CHISQUARE', 'L1', 'L2')
 
+class DistanceType(Enum):
+    CHISQUARE = 'ChiSquare'
+    L1 = 'L1'
+    L2 = 'L2'
 
 class Searcher:
     def __init__(self, dis_type=DistanceType.CHISQUARE, feature_type=Feature.HSV):
@@ -29,7 +32,7 @@ class Searcher:
     def distance(self, histA, histB):
         if self.dis_type == DistanceType.CHISQUARE:
             return Searcher.chi2_distance(histA, histB)
-        if self.dis_type = DistanceType.L1:
+        if self.dis_type == DistanceType.L1:
             return Searcher.l1_distance(histA, histB)
 
     @staticmethod
