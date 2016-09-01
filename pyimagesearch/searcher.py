@@ -4,7 +4,7 @@ from dao.imagedb import ImageDB
 from enum import Enum
 from colordescriptor import Feature
 
-DistanceType = Enum('CHISQAURE', 'L1', 'L2')
+DistanceType = Enum('CHISQUARE', 'L1', 'L2')
 
 
 class Searcher:
