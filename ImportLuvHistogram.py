@@ -28,7 +28,7 @@ count = 0
 start_time = time.time()
 for imgItem in imgList:
     if "ImageUrl" not in imgItem or imgItem[
-        "ImageUrl"] != "http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/127503.png"
+        "ImageUrl"] != "http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/127503.png":
         continue
     image = None
     if image is None and "ImageUrl" in imgItem:
