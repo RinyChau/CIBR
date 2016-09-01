@@ -36,7 +36,7 @@ class ImageDB:
         try:
             imgObj = {}
             imgObj["ImageName"] = path[path.rfind("/") + 1:]
-            imgObj['HSVFeature'] = [x.item() for x in features]
+            imgObj['HSVFeature'] = features
             imgObj["md5"] = md5
             imgObj["CreateTime"] = datetime.datetime.utcnow()
             imgObj["UpdateTime"] = datetime.datetime.utcnow()
