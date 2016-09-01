@@ -3,7 +3,11 @@ import numpy as np
 import cv2
 from enum import Enum
 
-Feature = Enum(HSV='HSVFeature', LUV='LUVFeature')
+
+class Feature(Enum):
+    HSV = 'HSVFeature'
+    LUV = 'LUVFeature'
+
 
 
 class ColorDescriptor:
