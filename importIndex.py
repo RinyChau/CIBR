@@ -1,13 +1,10 @@
 from pyimagesearch.colordescriptor import ColorDescriptor
-import argparse
-import glob
 import cv2
-import csv
-import datetime
 import hashlib
-import numpy as np
 from pymongo import MongoClient
-from bson.objectid import ObjectId
+from skimage import io
+from pyimagesearch.colordescriptor import Feature
+import time
 
 
 def md5(fname):
@@ -17,38 +14,45 @@ def md5(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--dataset", required = True,
-        help = "Path to the directory that contains the images to be indexed")
-ap.add_argument("-u", "--url", required = False,
-        help = "Path to the url directory that contains the images to be indexed")
-args = vars(ap.parse_args())
 
 # initialize mongodb client
 client = MongoClient("127.0.0.1:5988")
 
 # Content-based image retrieval database
 db = client.CIBR
+collection = db.ImageFeature
+imgList = list(collection.find())
 
+cd = ColorDescriptor(feature=Feature.HSV)
+count = 0
+start_time = time.time()
+for imgItem in imgList:
+    image = None
+    if "ImageUrl" in imgItem:
+        try:
+            image = io.imread(imgItem["ImageUrl"])
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        except:
+            print("unable to fetch image:%s", imgItem["ImageUrl"])
 
+    if image is None and "Path" in imgItem:
+        try:
+            image = cv2.imread("." + imgItem["Path"])
+        except:
+            print("unable to fetch image:%s", imgItem["Path"])
 
-# initialize the color descriptor
-cd = ColorDescriptor((8, 12, 3))
+    if image is None and "Path" not in imgItem and "ImageUrl" not in imgItem:
+        print("unable to fetch image:%s", imgItem)
+        continue
+    if image is None:
+        continue
 
-# use glob to grab the image paths and loop over them
-for imagePath in glob.glob(args["dataset"] + "/*.png"):
-    # extract the image ID (i.e. the unique filename) from the image
-    # path and load the image itself
-    imgObj = {}
-    imgObj["ImageName"] = imagePath[imagePath.rfind("/") + 1:]
-    image = cv2.imread(imagePath)
-    imgObj['HSVFeature'] = [x.item() for x in cd.describe(image)]
-    #imgObj["HSVFeature"]  = [type(x) for x in  cd.describe(image)[:1]]
-    imgObj["md5"] = md5(imagePath)
-    imgObj["CreateTime"] = datetime.datetime.utcnow()
-    imgObj["UpdateTime"] = datetime.datetime.utcnow()
-    if 'url' in args:
-        imgObj["ImageUrl"] = args['url'].strip('/')+'/'+ imgObj["ImageName"]
-    imgObj["Path"] = "/"+imagePath
-    #print(imgObj)
-    db.ImageFeature.insert_one(imgObj)
+    hsv_feature = cd.describe(image)
+    imgItem["HSVFeature"] = hsv_feature
+    collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+    count += 1
+    if count % 100 == 0:
+        print(count)
+        print("finish --- %s seconds ---" % (time.time() - start_time))
+print(count)
+print("--- %s seconds ---" % (time.time() - start_time))
