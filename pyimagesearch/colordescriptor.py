@@ -73,6 +73,11 @@ class ColorDescriptor:
         return features
 
     def describe_luv(self, image):
+
+        print("***\n")
+        print(image)
+        print("***\n")
+
         image = cv2.cvtColor(image, cv2.COLOR_BGR2LUV)
         segments = self.getSegements(image)
         center = self.getCenterMask(image)
@@ -95,6 +100,10 @@ class ColorDescriptor:
         # (h, w) = image.shape[:2]
         hist = self.luv_pw_historgram(image, center)
         features.extend(hist)
+
+        print("***\n")
+        print(features)
+        print("***\n")
         return features
 
     def luv_pw_historgram(self, image, maskObj, eps=1e-10):
