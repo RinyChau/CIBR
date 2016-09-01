@@ -48,7 +48,7 @@ for imgItem in imgList:
         continue
 
     hsv_feature = cd.describe(image)
-    imgItem["HSVFeature"] = hsv_feature
+    imgItem["HSVFeature"] = [x.item() for x in hsv_feature]
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
     if count % 100 == 0:
