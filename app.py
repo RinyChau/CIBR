@@ -68,11 +68,11 @@ def searchImgByFile(image_file):
     if imageItem is None:
         image = cv2.imread(imagePath)
         features = cd.describe(image)
-        results = Searcher.search(features)
+        results = searcher.search(features)
         thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
     else:
         features = imageItem['HSVFeature']
-        results = Searcher.search(features)
+        results = searcher.search(features)
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
     return results
 
@@ -81,7 +81,7 @@ def searchImgByUrl(image_url):
     query = io.imread(image_url)
     query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
     features = cd.describe(query)
-    results = Searcher.search(features)
+    results = searcher.search(features)
     thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
     return results
 
