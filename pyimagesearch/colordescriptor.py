@@ -73,11 +73,6 @@ class ColorDescriptor:
         return features
 
     def describe_luv(self, image):
-
-        print("***\n")
-        print(image)
-        print("***\n")
-
         image = cv2.cvtColor(image, cv2.COLOR_BGR2LUV)
         segments = self.getSegements(image)
         center = self.getCenterMask(image)
