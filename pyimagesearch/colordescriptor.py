@@ -69,6 +69,7 @@ class ColorDescriptor:
         features.extend(hist)
 
         # return the feature vector
+        features = [x.item() for x in features]
         return features
 
     def describe_luv(self, image):
