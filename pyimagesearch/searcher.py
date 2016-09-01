@@ -27,6 +27,8 @@ class Searcher:
                 else:
                     results[image["Path"]] = distance
         results = sorted([v, k] for (k,v) in results.items())
+        print("***\n" + queryFeatures + "***\n")
+
         return results[:limit]
 
     def distance(self, histA, histB):

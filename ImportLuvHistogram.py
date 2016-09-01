@@ -56,6 +56,6 @@ for imgItem in imgList:
     count += 1
     if count % 100 == 0:
         print(count)
-        print("finish --- %s seconds ---" % (time.time() - start_time))
+        print(" --- %s seconds ---" % (time.time() - start_time))
 print(count)
-print("--- %s seconds ---" % (time.time() - start_time))
+print("finish --- %s seconds ---" % (time.time() - start_time))
