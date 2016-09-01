@@ -53,7 +53,7 @@ for imgItem in imgList:
         continue
 
     feature = cd.describe(image)
-    imgItem['LUVFeature'] = feature
+    imgItem[feature_type] = feature
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
     if count % 100 == 0:

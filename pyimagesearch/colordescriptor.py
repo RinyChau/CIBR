@@ -96,6 +96,8 @@ class ColorDescriptor:
         hist = self.luv_pw_historgram(image, center)
         features.extend(hist)
 
+        return features
+
 
     def luv_pw_historgram(self, image, maskObj, eps=1e-10):
         (startX, startY, endX, endY) = maskObj["region"]
