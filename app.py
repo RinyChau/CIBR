@@ -8,6 +8,9 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 from pyimagesearch.searcher import Searcher
 from pyimagestore.imgManagement import ImgManagement
 from skimage import io
+from pyimagesearch.searcher import DistanceType
+from pyimagesearch.colordescriptor import Feature
+
 import cv2
 import thread
 # create flask instance
@@ -15,8 +18,12 @@ app = Flask(__name__)
 
 img_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "upload")
 img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
+
 # initialize the image descriptor
-cd = ColorDescriptor((8, 12, 3))
+cd = ColorDescriptor()
+
+# initialize the searcher
+searcher = Searcher(DistanceType.CHISQAURE, Feature.HSV)
 
 # main route
 @app.route('/')

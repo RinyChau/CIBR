@@ -1,26 +1,35 @@
 # import the necessary packages
 import numpy as np
 from dao.imagedb import ImageDB
+from enum import Enum
+from colordescriptor import Feature
+
+DistanceType = Enum('CHISQAURE', 'L1', 'L2')
 
 
 class Searcher:
-    @staticmethod
-    def search(queryFeatures, limit=10,forceRefresh=False):
-        # initialize our dictionary of results
-        results = {}
-        imageList = ImageDB.getList(force_refresh=forceRefresh)
-        for image in imageList:
-            features = image["HSVFeature"]
-            distance = Searcher.chi2_distance(features, queryFeatures)
-            if "ImageUrl" in image:
-                results[image["ImageUrl"]] = distance
-            else:
-                results[image["Path"]] = distance
-            
-        results = sorted([v, k] for (k,v) in results.items())
+    def __init__(self, dis_type=DistanceType.CHISQAURE, feature_type=Feature.HSV):
+        self.dis_type = dis_type
+        self.feature_type = feature_type
 
-        # return our (limited) results
+    def search(self, queryFeatures, limit=10, forceRefresh=False):
+        results = {}
+        image_list = ImageDB.getList(force_refresh=forceRefresh)
+        for image in image_list:
+            if self.feature_type in image:
+                features = image[self.feature_type]
+                distance = self.distance(features, queryFeatures)
+                if "ImageUrl" in image:
+                    results[image["ImageUrl"]] = distance
+                else:
+                    results[image["Path"]] = distance
+        results = sorted([v, k] for (k,v) in results.items())
         return results[:limit]
+
+    def distance(self, histA, histB):
+        if self.dis_type == DistanceType.CHISQUARE:
+            return Searcher.chi2_distance(histA, histB)
+
 
     @staticmethod
     def chi2_distance(histA, histB, eps=1e-10):
