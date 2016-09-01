@@ -29,7 +29,8 @@ class Searcher:
     def distance(self, histA, histB):
         if self.dis_type == DistanceType.CHISQUARE:
             return Searcher.chi2_distance(histA, histB)
-
+        if self.dis_type = DistanceType.L1:
+            return Searcher.l1_distance(histA, histB)
 
     @staticmethod
     def chi2_distance(histA, histB, eps=1e-10):
@@ -39,3 +40,7 @@ class Searcher:
 
         # return the chi-squared distance
         return d
+
+    @staticmethod
+    def l1_distance(histA, histB):
+        d = abs(histA - histB).sum()

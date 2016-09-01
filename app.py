@@ -20,10 +20,10 @@ img_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "upload")
 img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
 
 # initialize the image descriptor
-cd = ColorDescriptor()
-
+feature = Feature.LUV
+cd = ColorDescriptor(feature=feature)
 # initialize the searcher
-searcher = Searcher(DistanceType.CHISQUARE, Feature.HSV)
+searcher = Searcher(DistanceType.CHISQUARE, feature)
 
 # main route
 @app.route('/')
@@ -65,13 +65,14 @@ def searchImgByFile(image_file):
     imagePath = ImgManagement.saveFile(img_dir, image_file)
     imgMD5 = ImgManagement.getMD5(imagePath)
     imageItem = ImageDB.getItem({"md5": imgMD5})
+
     if imageItem is None:
         image = cv2.imread(imagePath)
         features = cd.describe(image)
         results = searcher.search(features)
         thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
     else:
-        features = imageItem['HSVFeature']
+        features = imageItem[feature]
         results = searcher.search(features)
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
     return results
