@@ -23,7 +23,7 @@ img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
 cd = ColorDescriptor()
 
 # initialize the searcher
-searcher = Searcher(DistanceType.CHISQAURE, Feature.HSV)
+searcher = Searcher(DistanceType.CHISQUARE, Feature.HSV)
 
 # main route
 @app.route('/')

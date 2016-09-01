@@ -8,7 +8,7 @@ DistanceType = Enum('CHISQUARE', 'L1', 'L2')
 
 
 class Searcher:
-    def __init__(self, dis_type=DistanceType.CHISQAURE, feature_type=Feature.HSV):
+    def __init__(self, dis_type=DistanceType.CHISQUARE, feature_type=Feature.HSV):
         self.dis_type = dis_type
         self.feature_type = feature_type
 
