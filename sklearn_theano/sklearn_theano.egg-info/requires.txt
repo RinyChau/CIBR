@@ -1,5 +1,0 @@
-numpy
-scipy
-Theano
-Pillow
-scikit-learn
