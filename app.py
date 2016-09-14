@@ -1,5 +1,6 @@
 import os
 import sys
+sys.path.append("app/dist/sklearn_theano-0.0.1-py2.7.egg")
 import traceback
 
 from flask import Flask, render_template, request, jsonify
@@ -10,7 +11,7 @@ from pyimagestore.imgManagement import ImgManagement
 from skimage import io
 from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
-
+import sklearn_theano
 import cv2
 import thread
 # create flask instance
