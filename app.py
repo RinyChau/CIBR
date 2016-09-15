@@ -11,7 +11,7 @@ from pyimagestore.imgManagement import ImgManagement
 from skimage import io
 from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
-import sklearn_theano
+from sklearn_theano.feature_extraction import GoogLeNetClassifier
 import cv2
 import thread
 # create flask instance
