@@ -61,13 +61,24 @@ for imgItem in imgList:
         continue
 
     result = clf.predict(image)
+
+    label = []
+    for tags in result.ravel():
+        for tag in tags.split(","):
+            label.append({"label": tag})
+
+    imgItem["labels"] = label
+    collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+
+
     # print(result)
 
     # feature = cd.describe(image)
     # imgItem[feature_type] = feature
     # collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
-    if count % 100 == 0:
+    if count % 50 == 0:
+        print(imgItem["labels"])
         print(count)
         print(" --- %s seconds ---" % (time.time() - start_time))
 print(count)
