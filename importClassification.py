@@ -39,7 +39,7 @@ for imgItem in imgList:
     if image is None and "ImageUrl" in imgItem:
         try:
             file = cStringIO.StringIO(urllib.urlopen(imgItem["ImageUrl"]).read())
-            img = np.array(Image.open(file))
+            image = np.array(Image.open(file))
 
             # image = io.imread(imgItem["ImageUrl"])
             # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
@@ -49,7 +49,7 @@ for imgItem in imgList:
     if image is None and "Path" in imgItem:
         try:
             file_path = "./app" + imgItem["Path"]
-            img = np.array(Image.open(file_path, 'r'))
+            image = np.array(Image.open(file_path, 'r'))
             # image = cv2.imread("." + imgItem["Path"])
         except:
             print("unable to fetch image:%s", imgItem["Path"])
@@ -60,7 +60,7 @@ for imgItem in imgList:
     if image is None:
         continue
 
-    result = clf.predict(img)
+    result = clf.predict(image)
     print(result)
 
     # feature = cd.describe(image)
