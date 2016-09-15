@@ -1,9 +1,13 @@
+import sys
+
+sys.path.append("app/dist/sklearn_theano-0.0.1-py2.7.egg")
 from pyimagesearch.colordescriptor import ColorDescriptor
 import cv2
 import hashlib
 from pymongo import MongoClient
 from skimage import io
 from pyimagesearch.colordescriptor import Feature
+
 import time
 import urllib, cStringIO
 import numpy as np
