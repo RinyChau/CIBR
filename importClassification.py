@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("dist/sklearn_theano-0.0.1-py2.7.egg")
+sys.path.append("app/dist/sklearn_theano-0.0.1-py2.7.egg")
 import hashlib
 from pymongo import MongoClient
 import time
@@ -48,7 +48,7 @@ for imgItem in imgList:
 
     if image is None and "Path" in imgItem:
         try:
-            file_path = "." + imgItem["Path"]
+            file_path = "./app" + imgItem["Path"]
             img = np.array(Image.open(file_path, 'r'))
             # image = cv2.imread("." + imgItem["Path"])
         except:
