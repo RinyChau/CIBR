@@ -1,18 +1,12 @@
 import sys
 
-sys.path.append("app/dist/sklearn_theano-0.0.1-py2.7.egg")
-from pyimagesearch.colordescriptor import ColorDescriptor
-import cv2
+sys.path.append("dist/sklearn_theano-0.0.1-py2.7.egg")
 import hashlib
 from pymongo import MongoClient
-from skimage import io
-from pyimagesearch.colordescriptor import Feature
-
 import time
 import urllib, cStringIO
 import numpy as np
 
-from pyimagesearch.colordescriptor import Feature
 from sklearn_theano.feature_extraction import GoogLeNetClassifier
 from PIL import Image
 
@@ -32,8 +26,6 @@ client = MongoClient("127.0.0.1:5988")
 db = client.CIBR
 collection = db.ImageFeature
 imgList = list(collection.find())
-feature_type = Feature.LUV
-cd = ColorDescriptor(feature=feature_type)
 count = 0
 start_time = time.time()
 top_n_classes = 5
