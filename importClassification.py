@@ -61,7 +61,7 @@ for imgItem in imgList:
         continue
 
     result = clf.predict(image)
-    print(result)
+    # print(result)
 
     # feature = cd.describe(image)
     # imgItem[feature_type] = feature
