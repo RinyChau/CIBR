@@ -66,7 +66,7 @@ for imgItem in imgList:
     # feature = cd.describe(image)
     # imgItem[feature_type] = feature
     # collection.replace_one({"_id": imgItem["_id"]}, imgItem)
-    # count += 1
+    count += 1
     if count % 100 == 0:
         print(count)
         print(" --- %s seconds ---" % (time.time() - start_time))
