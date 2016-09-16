@@ -63,9 +63,11 @@ for imgItem in imgList:
     result = clf.predict(image)
 
     label = []
+    top_n_prob = 0
     for tags in result.ravel():
+        top_n_prob += 1
         for tag in tags.split(","):
-            label.append({"label": tag})
+            label.append({"label": tag, "top_n_pror": top_n_prob})
 
     imgItem["labels"] = label
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
