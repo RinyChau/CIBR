@@ -30,6 +30,33 @@ class Searcher:
 
         return results[:limit]
 
+    def search_by_labels(self, queryFeatures, labels, limit=50):
+        image_list = ImageDB.getListByLabels(labels=labels)
+
+        results = [x for x in image_list if self.feature_type in x]
+        for image in results:
+            image["distance"] = self.distance(image[self.feature_type], queryFeatures)
+            if "ImageUrl" in image:
+                image["path"] = image["ImageUrl"]
+            else:
+                image["path"] = image["Path"]
+        results.sort(key=lambda x: x["distance"])
+        return results[:limit]
+
+        #     if self.feature_type in image:
+        #         results.append(image)
+        # features = image[self.feature_type]
+        # distance = self.distance(features, queryFeatures)
+        # if "ImageUrl" in image:
+        #     results[image["ImageUrl"]] = distance
+        # else:
+        #     results[image["Path"]] = distance
+        # results = sorted([v, k] for (k,v) in results.items())
+
+
+
+
+
     def distance(self, histA, histB):
         if self.dis_type == DistanceType.CHISQUARE:
             return Searcher.chi2_distance(histA, histB)

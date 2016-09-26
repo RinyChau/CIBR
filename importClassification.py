@@ -1,5 +1,4 @@
 import sys
-
 sys.path.append("app/dist/sklearn_theano-0.0.1-py2.7.egg")
 import hashlib
 from pymongo import MongoClient

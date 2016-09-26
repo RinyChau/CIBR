@@ -7,13 +7,15 @@ from flask import Flask, render_template, request, jsonify
 from dao.imagedb import ImageDB
 from pyimagesearch.colordescriptor import ColorDescriptor
 from pyimagesearch.searcher import Searcher
+from pyimagesearch.CNNClassifier import CNNClassifier
 from pyimagestore.imgManagement import ImgManagement
 from skimage import io
 from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
-from sklearn_theano.feature_extraction import GoogLeNetClassifier
 import cv2
 import thread
+
+from PIL import Image
 # create flask instance
 app = Flask(__name__)
 
@@ -27,10 +29,18 @@ cd = ColorDescriptor(feature=feature)
 # initialize the searcher
 searcher = Searcher(DistanceType.L1, feature)
 
+# initialize CNNClassifier
+top_n_classes = 2
+top_n_array = [x for x in range(1, top_n_classes + 1)]
+
+classifier = CNNClassifier(top_n_classes)
+label = "labels"
+
 # main route
 @app.route('/')
 def index():
     return render_template('index.html')
+
 # search route
 @app.route('/search', methods=['POST'])
 def search():
@@ -39,7 +49,6 @@ def search():
         # get url
         image_url = request.form.get('url')
         image_file = request.files['img'] if 'img' in request.files else None
-
         try:
             # load the query image and describe it
             if image_file is not None and image_file.filename != '':
@@ -48,12 +57,13 @@ def search():
                 results = searchImgByUrl(image_url)
 
             # loop over the results, displaying the score and image name
-            for (score, url) in results:
-                result_array.append(
-                    {"image": str(url), "score": str(score)})
+            # for (score, url) in results:
+            #     result_array.append(
+            #         {"image": str(url), "score": str(score)})
+
 
             # return success
-            return jsonify(results=(result_array))
+            return jsonify(results=(results))
         except:
             print("*** app.search() takes error ***")
             print(sys.exc_info()[0])
@@ -69,24 +79,54 @@ def searchImgByFile(image_file):
     imageItem = ImageDB.getItem({"md5": imgMD5})
 
     if imageItem is None:
-        image = cv2.imread(imagePath)
-        features = cd.describe(image)
-        results = searcher.search(features)
-        thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
+        image = Image.open(imagePath, 'r')
+        features = cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+        labels = parse_label(classifier.predict(image))
+
+        # image = cv2.imread(imagePath)
+        # features = cd.describe(image)
+        # results = searcher.search(features)
+
+        # thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
     else:
         features = imageItem[feature]
-        results = searcher.search(features)
-        thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
-    return results
+        # top_n_array = [x for x in range(1, top_n_classes+1)]
+        labels = [x["label"] for x in imageItem["labels"] if x["top_n_prob"] in top_n_array]
+        # results = searcher.search(features)
+        # thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
+
+    # delete all upload file
+    thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
+
+    return searchImg(features, labels)
+    # return results
+
+
+def parse_label(labels):
+    label_list = []
+    # top_n_prob = 0
+    for tags in labels.ravel():
+        # top_n_prob += 1
+        for tag in tags.split(","):
+            label_list.append(tag)
+            # label.append({"label": tag, "top_n_prob": top_n_prob})
+    return label_list
 
 
 def searchImgByUrl(image_url):
     query = io.imread(image_url)
-    query = cv2.cvtColor(query, cv2.COLOR_RGB2BGR)
-    features = cd.describe(query)
-    results = searcher.search(features)
-    thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
-    return results
+    labels = parse_label(classifier.predict(query))
+    features = cd.describe(cv2.cvtColor(query, cv2.COLOR_RGB2BGR))
+    # results = searcher.search(features)
+
+    # thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
+    return searchImg(features, labels)
+    # return results
+
+
+def searchImg(features, labels):
+    return searcher.search_by_labels(queryFeatures=features, labels=labels)
+    # pass
 
 # run!
 if __name__ == '__main__':

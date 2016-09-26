@@ -100,8 +100,8 @@ $(function() {
                 console.log(result.results);
                 var data = result.results;
                 for (i = 0; i < data.length; i++) {
-                    $("#results").append('<tr><th><a href="' + data[i]["image"] + '"><img src="' + data[i]["image"] +
-                        '" class="result-img"></a></th><th>' + data[i]['score'] + '</th></tr>')
+                    $("#results").append('<tr><th><a href="' + data[i]["path"] + '"><img src="' + data[i]["image"] +
+                        '" class="result-img"></a></th><th>' + data[i]['distance'] + '</th></tr>')
                 }
                 ;
                 $("#results-table").show();

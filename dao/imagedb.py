@@ -9,6 +9,7 @@ class ImageDB:
     client = MongoClient("127.0.0.1:5988")
     db = client.CIBR
     collection = db.ImageFeature
+
     @staticmethod
     def getList(force_refresh=False):
         try:
@@ -25,6 +26,21 @@ class ImageDB:
             traceback.print_exc()
             print("*** ImageDB getList takes error ***")
             raise
+
+    @staticmethod
+    def getListByLabels(labels):
+        try:
+            # dbQuery = {"$and":[{"labels.label":label,"top_n_prob":1} for label in labels]}
+            dbQuery = {"labels.label": {"$in": labels}, "top_n_prob": 1}
+            list = list(ImageDB.collection.find(dbQuery))
+            return list
+        except:
+            print("*** ImageDB getListByLabels takes error ***")
+            print(sys.exc_info()[0])
+            traceback.print_exc()
+            print("*** ImageDB getListByLabels takes error ***")
+            raise
+
 
     @staticmethod
     def getItem(param, force_refresh=False):
