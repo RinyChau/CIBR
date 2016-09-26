@@ -56,6 +56,10 @@ def search():
             else:
                 results = searchImgByUrl(image_url)
 
+            result_array = []
+            for result in results:
+                result_array.append(
+                    {"path": str(result["path"]), "distance": result["distance"], "labels": result["labels"]})
             # loop over the results, displaying the score and image name
             # for (score, url) in results:
             #     result_array.append(
@@ -63,7 +67,7 @@ def search():
 
 
             # return success
-            return jsonify(results=(results))
+            return jsonify(results=(result_array))
         except:
             print("*** app.search() takes error ***")
             print(sys.exc_info()[0])
