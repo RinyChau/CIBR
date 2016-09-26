@@ -125,6 +125,7 @@ def searchImgByUrl(image_url):
 
 
 def searchImg(features, labels):
+    print("app.searchImg: labels:" + str(labels))
     return searcher.search_by_labels(queryFeatures=features, labels=labels)
     # pass
 
