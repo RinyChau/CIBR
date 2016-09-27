@@ -32,7 +32,6 @@ class Searcher:
 
     def search_by_labels(self, queryFeatures, labels, limit=50):
         image_list = ImageDB.getListByLabels(labels=labels)
-
         results = [x for x in image_list if self.feature_type in x]
         for image in results:
             image["distance"] = self.distance(image[self.feature_type], queryFeatures)
