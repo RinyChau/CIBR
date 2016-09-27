@@ -95,7 +95,7 @@ def searchImgByFile(image_file):
     else:
         features = imageItem[feature]
         # top_n_array = [x for x in range(1, top_n_classes+1)]
-        labels = [x["label"] for x in imageItem["labels"] if x["top_n_prob"] in top_n_array]
+        labels = [x["label"] for x in imageItem["labels"] if x["rank"] in top_n_array]
         # results = searcher.search(features)
         # thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
 
