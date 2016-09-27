@@ -34,7 +34,7 @@ for imgItem in imgList:
     if "labels" in imgItem:
         for i in range(len(imgItem["labels"])):
             imgItem["labels"][i]["top_n_prob"] = 6 - imgItem["labels"][i]["top_n_prob"]
-            collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+        collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     continue
 
     # if "ImageUrl" not in imgItem or imgItem[
