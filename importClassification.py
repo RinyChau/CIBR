@@ -29,11 +29,11 @@ count = 0
 start_time = time.time()
 top_n_classes = 5
 clf = GoogLeNetClassifier(top_n=top_n_classes)
-
 for imgItem in imgList:
     if "labels" in imgItem:
         for i in range(len(imgItem["labels"])):
             imgItem["labels"][i]["top_n_prob"] = 6 - imgItem["labels"][i]["top_n_prob"]
+        imgItem["labels"].sort(key=lambda x: x["top_n_prob"])
         collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     continue
 
