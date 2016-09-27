@@ -122,7 +122,6 @@ def searchImgByUrl(image_url):
     features = cd.describe(cv2.cvtColor(query, cv2.COLOR_RGB2BGR))
     labels = parse_label(classifier.predict(query))
     # results = searcher.search(features)
-    print(query)
     # thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
     return searchImg(features, labels)
     # return results

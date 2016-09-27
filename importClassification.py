@@ -31,6 +31,13 @@ top_n_classes = 5
 clf = GoogLeNetClassifier(top_n=top_n_classes)
 
 for imgItem in imgList:
+    if "labels" in imgItem:
+        for i in range(len(imgItem["labels"])):
+            imgItem["labels"][i]["top_n_prob"] = 6 - imgItem["labels"][i]["top_n_prob"]
+            collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+
+    continue
+
     # if "ImageUrl" not in imgItem or imgItem[
     #     "ImageUrl"] != "http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/127503.png":
     #     continue
