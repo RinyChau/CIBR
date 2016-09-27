@@ -30,13 +30,6 @@ start_time = time.time()
 top_n_classes = 5
 clf = GoogLeNetClassifier(top_n=top_n_classes)
 for imgItem in imgList:
-    if "labels" in imgItem:
-        for i in range(len(imgItem["labels"])):
-            imgItem["labels"][i]["top_n_prob"] = 6 - imgItem["labels"][i]["top_n_prob"]
-        imgItem["labels"].sort(key=lambda x: x["top_n_prob"])
-        collection.replace_one({"_id": imgItem["_id"]}, imgItem)
-    continue
-
     # if "ImageUrl" not in imgItem or imgItem[
     #     "ImageUrl"] != "http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/127503.png":
     #     continue
@@ -65,14 +58,20 @@ for imgItem in imgList:
     if image is None:
         continue
 
-    result = clf.predict(image)
-
+    labels = reversed(clf.predict(image).ravel())
+    probs = reversed(clf.predict_proba(image).ravel())
+    if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
+        print("probs is not sorted")
+        break
     label = []
     top_n_prob = 0
-    for tags in result.ravel():
+    length = len(labels)
+    for i in range(length):
+        tags = labels[i]
+        prob = probs[i]
         top_n_prob += 1
         for tag in tags.split(","):
-            label.append({"label": tag, "top_n_prob": top_n_prob})
+            label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i]})
 
     imgItem["labels"] = label
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)

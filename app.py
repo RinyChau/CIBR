@@ -109,7 +109,7 @@ def searchImgByFile(image_file):
 def parse_label(labels):
     label_list = []
     # top_n_prob = 0
-    for tags in labels.ravel():
+    for tags in reversed(labels.ravel()):
         # top_n_prob += 1
         for tag in tags.split(","):
             label_list.append(tag)
