@@ -71,7 +71,7 @@ for imgItem in imgList:
         prob = probs[i]
         top_n_prob += 1
         for tag in tags.split(","):
-            label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i]})
+            label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i].item()})
 
     imgItem["labels"] = label
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
