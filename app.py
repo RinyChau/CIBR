@@ -14,6 +14,7 @@ from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
 import cv2
 import thread
+import numpy as np
 
 from PIL import Image
 # create flask instance
@@ -83,7 +84,7 @@ def searchImgByFile(image_file):
     imageItem = ImageDB.getItem({"md5": imgMD5})
 
     if imageItem is None:
-        image = Image.open(imagePath, 'r')
+        image = np.array(Image.open(imagePath, 'r'))
         features = cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
         labels = parse_label(classifier.predict(image))
 
