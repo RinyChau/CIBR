@@ -58,8 +58,8 @@ for imgItem in imgList:
     if image is None:
         continue
 
-    labels = reversed(clf.predict(image).ravel())
-    probs = reversed(clf.predict_proba(image).ravel())
+    labels = clf.predict(image).ravel()[::-1]
+    probs = clf.predict_proba(image).ravel()[::-1]
     if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
         print("probs is not sorted")
         break
