@@ -87,7 +87,6 @@ def searchImgByFile(image_file):
         image = np.array(Image.open(imagePath, 'r'))
         features = cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
         labels = parse_label(classifier.predict(image))
-        print(image)
         # image = cv2.imread(imagePath)
         # features = cd.describe(image)
         # results = searcher.search(features)
