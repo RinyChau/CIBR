@@ -40,6 +40,10 @@ class Searcher:
             else:
                 image["path"] = image["Path"]
         results.sort(key=lambda x: x["distance"])
+
+        # only select the top 1000 pictures
+        # results = results[:1000]
+
         return results[:limit]
 
         #     if self.feature_type in image:
