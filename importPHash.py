@@ -28,6 +28,7 @@ for imgItem in imgList:
     if image is None and "ImageUrl" in imgItem:
         try:
             image = cStringIO.StringIO(urllib.urlopen(imgItem["ImageUrl"]).read())
+            image = Image.open(image)
             # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         except:
             print("unable to fetch image:%s", imgItem["ImageUrl"])
