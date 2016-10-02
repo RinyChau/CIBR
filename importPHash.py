@@ -10,13 +10,6 @@ import urllib, cStringIO
 import imagehash
 
 
-def md5(fname):
-    hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
-
 
 # initialize mongodb client
 client = MongoClient("127.0.0.1:5988")
@@ -25,8 +18,6 @@ client = MongoClient("127.0.0.1:5988")
 db = client.CIBR
 collection = db.ImageFeature
 imgList = list(collection.find())
-feature_type = Feature.LUV
-cd = ColorDescriptor(feature=feature_type)
 count = 0
 start_time = time.time()
 for imgItem in imgList:
