@@ -5,16 +5,13 @@ import traceback
 
 from flask import Flask, render_template, request, jsonify
 from dao.imagedb import ImageDB
-from pyimagesearch.colordescriptor import ColorDescriptor
+
 from pyimagesearch.searcher import Searcher
-from pyimagesearch.CNNClassifier import CNNClassifier
 from pyimagestore.imgManagement import ImgManagement
-from skimage import io
 from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
-import cv2
-import thread
 import numpy as np
+import urllib, cStringIO, thread
 
 from PIL import Image
 # create flask instance
@@ -26,15 +23,12 @@ img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
 # initialize the image descriptor
 feature = Feature.LUV
 distance_type = DistanceType.L1
-cd = ColorDescriptor(feature=feature)
-# initialize the searcher
-searcher = Searcher(DistanceType.L1, feature)
 
-# initialize CNNClassifier
 top_n_classes = 2
-top_n_array = [x for x in range(1, top_n_classes + 1)]
+# initialize the searcher
+searcher = Searcher(DistanceType.L1, feature, feature, top_n_classes)
 
-classifier = CNNClassifier(top_n_classes)
+
 label = "labels"
 
 # main route
@@ -85,50 +79,35 @@ def searchImgByFile(image_file):
 
     if imageItem is None:
         image = np.array(Image.open(imagePath, 'r'))
-        features = cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
-        labels = parse_label(classifier.predict(image))
+        # delete all upload file
+        thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
+        return searcher.search(image)
+
+        # features = cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+        # labels = parse_label(classifier.predict(image))
         # image = cv2.imread(imagePath)
         # features = cd.describe(image)
         # results = searcher.search(features)
 
         # thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
     else:
-        features = imageItem[feature]
+        # delete all upload file
+        thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
+        return search.search_by_features(imageItem)
+        # features = imageItem[feature]
         # top_n_array = [x for x in range(1, top_n_classes+1)]
-        labels = [x["label"] for x in imageItem["labels"] if x["rank"] in top_n_array]
+        # labels = [x["label"] for x in imageItem["labels"] if x["rank"] in top_n_array]
         # results = searcher.search(features)
         # thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
 
-    # delete all upload file
-    thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
-
-    return searchImg(features, labels)
-    # return results
-
-
-def parse_label(labels):
-    label_list = []
-    # top_n_prob = 0
-    for tags in reversed(labels.ravel()):
-        # top_n_prob += 1
-        for tag in tags.split(","):
-            label_list.append(tag)
-            # label.append({"label": tag, "top_n_prob": top_n_prob})
-    return label_list
-
 
 def searchImgByUrl(image_url):
-    query = io.imread(image_url)
-    features = cd.describe(cv2.cvtColor(query, cv2.COLOR_RGB2BGR))
-    labels = parse_label(classifier.predict(query))
+    file = cStringIO.StringIO(urllib.urlopen(image_url).read())
+    image = np.array(Image.open(file))
     # results = searcher.search(features)
     # thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
-    return searchImg(features, labels)
+    return search.search(image)
     # return results
-
-
-def searchImg(features, labels):
-    return searcher.search_by_labels(queryFeatures=features, labels=labels)
     # pass
 
 # run!

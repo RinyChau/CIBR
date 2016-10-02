@@ -3,7 +3,12 @@ import numpy as np
 from dao.imagedb import ImageDB
 from enum import Enum
 from colordescriptor import Feature
-
+from pyimagesearch.CNNClassifier import CNNClassifier
+from helper import Distance, PHash
+from pyimagesearch.colordescriptor import ColorDescriptor
+from helper import PicklePoints
+import cv2
+import imagehash
 
 class DistanceType(Enum):
     CHISQUARE = 'ChiSquare'
@@ -11,24 +16,82 @@ class DistanceType(Enum):
     L2 = 'L2'
 
 class Searcher:
-    def __init__(self, dis_type=DistanceType.CHISQUARE, feature_type=Feature.HSV):
+    def __init__(self, dis_type=DistanceType.CHISQUARE, feature_type=Feature.HSV, top_n_classes=2):
         self.dis_type = dis_type
         self.feature_type = feature_type
+        self.cd = ColorDescriptor(feature=feature_type)
+        # initialize CNNClassifier
+        self.top_n_classes = top_n_classes
+        self.classifier = CNNClassifier(self.top_n_classes)
+        self.orb = cv2.ORB_create()
 
-    def search(self, queryFeatures, limit=10, forceRefresh=False):
-        results = {}
-        image_list = ImageDB.getList(force_refresh=forceRefresh)
-        for image in image_list:
-            if self.feature_type in image:
-                features = image[self.feature_type]
-                distance = self.distance(features, queryFeatures)
-                if "ImageUrl" in image:
-                    results[image["ImageUrl"]] = distance
+    def search(self, image):
+        pre_labels = self.classifier.predict(image).ravel()[::-1]
+        probs = self.classifier.predict_proba(image).ravel()[::-1]
+        labels = []
+        length = len(pre_labels)
+        rank = 0
+        for i in range(length):
+            tags = pre_labels[i]
+            pre_labels[i] = tags[:tags.index(',')] if ',' in tags else tags
+            prob = probs[i]
+            rank += 1
+            labels.append({"label": pre_labels[i], "rank": rank, 'prob': prob.item()})
+
+        img_item = {"labels": labels,
+                    self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
+                    "PHash": imagehash.phash(image).hash.flatten(), "pre_labels": pre_labels}
+
+        kp = self.orb.detect(image, None)
+        # compute the descriptors with ORB
+        kp, des = self.orb.compute(image, kp)
+        orb_feature = PicklePoints.pickle_keypoints(kp, des)
+        img_item["ORB"] = orb_feature
+        return self.search_by_features(img_item=img_item)
+        # return self.search_by_features(img_item)
+        # image_list = ImageDB.getListByLabels(labels=labels)
+        # color_dis_list = Distance.distance()
+        # pass
+
+    def search_by_features(self, img_item):
+        if "pre_labels" not in img_item:
+            pre_labels = []
+            length = img_item["labels"]
+            rank = 0
+            for i in range(len(length)):
+                item = img_item[i]
+                if rank != item["rank"]:
+                    rank = item["rank"]
                 else:
-                    results[image["Path"]] = distance
-        results = sorted([v, k] for (k,v) in results.items())
+                    continue
+                if rank > self.top_n_classes:
+                    break
+                pre_labels.append(item["label"])
+            img_item["pre_labels"] = pre_labels
+        image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
+        image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
+        for image in image_list:
+            image["distance"] = 0
+            if "ImageUrl" in image:
+                image["path"] = image["ImageUrl"]
+            else:
+                image["path"] = image["Path"]
+        return image_list
 
-        return results[:limit]
+    # def search(self, queryFeatures, limit=10, forceRefresh=False):
+    #     results = {}
+    #     image_list = ImageDB.getList(force_refresh=forceRefresh)
+    #     for image in image_list:
+    #         if self.feature_type in image:
+    #             features = image[self.feature_type]
+    #             distance = self.distance(features, queryFeatures)
+    #             if "ImageUrl" in image:
+    #                 results[image["ImageUrl"]] = distance
+    #             else:
+    #                 results[image["Path"]] = distance
+    #     results = sorted([v, k] for (k,v) in results.items())
+    #
+    #     return results[:limit]
 
     def search_by_labels(self, queryFeatures, labels, limit=50):
         image_list = ImageDB.getListByLabels(labels=labels)
@@ -46,36 +109,12 @@ class Searcher:
 
         return results[:limit]
 
-        #     if self.feature_type in image:
-        #         results.append(image)
-        # features = image[self.feature_type]
-        # distance = self.distance(features, queryFeatures)
-        # if "ImageUrl" in image:
-        #     results[image["ImageUrl"]] = distance
-        # else:
-        #     results[image["Path"]] = distance
-        # results = sorted([v, k] for (k,v) in results.items())
-
-
-
-
-
-    def distance(self, histA, histB):
-        if self.dis_type == DistanceType.CHISQUARE:
-            return Searcher.chi2_distance(histA, histB)
-        if self.dis_type == DistanceType.L1:
-            return Searcher.l1_distance(histA, histB)
-
-    @staticmethod
-    def chi2_distance(histA, histB, eps=1e-10):
-        # compute the chi-squared distance
-        d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
-                          for (a, b) in zip(histA, histB)])
-
-        # return the chi-squared distance
-        return d
-
-    @staticmethod
-    def l1_distance(histA, histB):
-        d = np.sum([abs(a - b) for (a, b) in zip(histA, histB)])
-        return d
+# def parse_label(labels):
+#     label_list = []
+#     # top_n_prob = 0
+#     for tags in reversed(labels.ravel()):
+#         label_list.append(tags[:tags.index(',')] if ',' in tags else tags)
+#         # for tag in tags.split(","):
+#         #     label_list.append(tag)
+#         #     label.append({"label": tag, "top_n_prob": top_n_prob})
+#     return label_list
