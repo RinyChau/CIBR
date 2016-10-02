@@ -46,7 +46,7 @@ for imgItem in imgList:
         continue
 
     phash = imagehash.phash(image)
-    imgItem["PHash"] = [x for x in phash.hash.flatten()]
+    imgItem["PHash"] = [x.item() for x in phash.hash.flatten()]
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
     if count % 100 == 0:
