@@ -27,16 +27,14 @@ class Searcher:
 
     def search(self, image):
         pre_labels = self.classifier.predict(image).ravel()[::-1]
+        pre_labels = [tags[:tags.index(',')] for tags in pre_labels]
         probs = self.classifier.predict_proba(image).ravel()[::-1]
         labels = []
         length = len(pre_labels)
         rank = 0
         for i in range(length):
-            tags = pre_labels[i]
-            pre_labels[i] = tags[:tags.index(',')] if ',' in tags else tags
-            prob = probs[i]
             rank += 1
-            labels.append({"label": pre_labels[i], "rank": rank, 'prob': prob.item()})
+            labels.append({"label": pre_labels[i], "rank": rank, 'prob': probs[i].item()})
 
         img_item = {"labels": labels,
                     self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),

@@ -26,7 +26,7 @@ distance_type = DistanceType.L1
 
 top_n_classes = 2
 # initialize the searcher
-searcher = Searcher(DistanceType.L1, feature, feature, top_n_classes)
+searcher = Searcher(DistanceType.L1, feature, top_n_classes)
 
 
 label = "labels"
@@ -93,7 +93,7 @@ def searchImgByFile(image_file):
     else:
         # delete all upload file
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
-        return search.search_by_features(imageItem)
+        return searcher.search_by_features(imageItem)
         # features = imageItem[feature]
         # top_n_array = [x for x in range(1, top_n_classes+1)]
         # labels = [x["label"] for x in imageItem["labels"] if x["rank"] in top_n_array]
@@ -106,7 +106,7 @@ def searchImgByUrl(image_url):
     image = np.array(Image.open(file))
     # results = searcher.search(features)
     # thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
-    return search.search(image)
+    return searcher.search(image)
     # return results
     # pass
 
