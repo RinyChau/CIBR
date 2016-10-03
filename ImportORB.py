@@ -2,9 +2,9 @@ from helper import PicklePoints
 import cv2
 from pymongo import MongoClient
 import time
-from PIL import Image
-import urllib
+import urllib, cStringIO, thread
 import numpy as np
+from PIL import Image
 
 # initialize mongodb client
 client = MongoClient("127.0.0.1:5988")
@@ -22,9 +22,8 @@ for imgItem in imgList:
     image = None
     if image is None and "ImageUrl" in imgItem:
         try:
-            resp = urllib.urlopen(imgItem["ImageUrl"])
-            image = np.asarray(bytearray(resp.read()), dtype="uint8")
-            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+            file = cStringIO.StringIO(urllib.urlopen(imgItem["ImageUrl"]).read())
+            image = np.array(Image.open(file))
             # image = cStringIO.StringIO(urllib.urlopen(imgItem["ImageUrl"]).read())
             # image = Image.open(image)
             # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
@@ -33,7 +32,7 @@ for imgItem in imgList:
 
     if image is None and "Path" in imgItem:
         try:
-            image = cv2.imread("." + imgItem["Path"])
+            image = np.array(Image.open("." + imgItem["Path"], 'r'))
         except:
             print("unable to fetch image:%s", imgItem["Path"])
 
@@ -43,6 +42,7 @@ for imgItem in imgList:
     if image is None:
         continue
 
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     # Initiate STAR detector
     orb = cv2.ORB_create()
     # find the keypoints with ORB
