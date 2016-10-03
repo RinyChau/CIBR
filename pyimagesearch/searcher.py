@@ -29,7 +29,7 @@ class Searcher:
         phash = imagehash.phash(image)
         image = np.array(image)
         pre_labels = self.classifier.predict(image).ravel()[::-1]
-        pre_labels = [tags[:tags.index(',')] for tags in pre_labels]
+        pre_labels = [tags.split(',')[0] for tags in pre_labels]
         probs = self.classifier.predict_proba(image).ravel()[::-1]
         labels = []
         length = len(pre_labels)
@@ -68,7 +68,9 @@ class Searcher:
                     break
                 pre_labels.append(item["label"])
             img_item["pre_labels"] = pre_labels
+        print(img_item["pre_labels"])
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
+        print(len(img_item))
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
         for image in image_list:
             image["distance"] = 0
