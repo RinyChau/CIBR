@@ -78,7 +78,7 @@ def searchImgByFile(image_file):
     imageItem = ImageDB.getItem({"md5": imgMD5})
 
     if imageItem is None:
-        image = np.array(Image.open(imagePath, 'r'))
+        image = Image.open(imagePath, 'r')
         # delete all upload file
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
         return searcher.search(image)
@@ -103,7 +103,7 @@ def searchImgByFile(image_file):
 
 def searchImgByUrl(image_url):
     file = cStringIO.StringIO(urllib.urlopen(image_url).read())
-    image = np.array(Image.open(file))
+    image = Image.open(file)
     # results = searcher.search(features)
     # thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
     return searcher.search(image)

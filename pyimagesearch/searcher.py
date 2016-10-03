@@ -26,6 +26,8 @@ class Searcher:
         self.orb = cv2.ORB_create()
 
     def search(self, image):
+        phash = imagehash.phash(image)
+        image = np.array(image)
         pre_labels = self.classifier.predict(image).ravel()[::-1]
         pre_labels = [tags[:tags.index(',')] for tags in pre_labels]
         probs = self.classifier.predict_proba(image).ravel()[::-1]
@@ -38,11 +40,11 @@ class Searcher:
 
         img_item = {"labels": labels,
                     self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
-                    "PHash": imagehash.phash(image).hash.flatten(), "pre_labels": pre_labels}
+                    "PHash": [x.item() for x in phash.hash.flatten()], "pre_labels": pre_labels}
 
         kp = self.orb.detect(image, None)
         # compute the descriptors with ORB
-        kp, des = self.orb.compute(image, kp)
+        kp, des = self.orb.compute(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY), kp)
         orb_feature = PicklePoints.pickle_keypoints(kp, des)
         img_item["ORB"] = orb_feature
         return self.search_by_features(img_item=img_item)
