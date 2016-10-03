@@ -10,3 +10,6 @@ class CNNClassifier:
 
     def predict(self, X):
         return self.clf.predict(X)
+
+    def predict(self, X):
+        return self.clf.predict_proba(X)
