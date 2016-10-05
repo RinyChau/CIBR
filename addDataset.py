@@ -52,7 +52,7 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
     imgObj["ImageName"] = imagePath[imagePath.rfind("/") + 1:]
     image_url = None
 
-    if 'url' in args:
+    if 'url' in args and args['url'] is not None:
         image_url = args['url'].strip('/') + '/' + imgObj["ImageName"]
         file = cStringIO.StringIO(urllib.urlopen(image_url).read())
         image_src = Image.open(file)
