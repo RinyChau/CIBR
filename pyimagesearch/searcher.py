@@ -42,7 +42,7 @@ class Searcher:
 
         img_item = {"labels": labels,
                     self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
-                    "PHash": [x.item() for x in phash.hash.flatten()], "pre_labels": pre_labels}
+                    "PHash": phash.hash.flatten(), "pre_labels": pre_labels}
 
         kp = self.orb.detect(image, None)
         # compute the descriptors with ORB
@@ -74,6 +74,8 @@ class Searcher:
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
+        # phash_dist = Distance.distance()
+
         # color_dis_order_index = np.argsort(x)
 
         list_len = len(image_list)
