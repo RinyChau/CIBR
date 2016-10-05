@@ -11,6 +11,8 @@ from pyimagesearch.colordescriptor import Feature
 from sklearn_theano.feature_extraction import GoogLeNetClassifier
 import imagehash
 from helper import PicklePoints
+import urllib, cStringIO
+import time
 
 
 def md5(fname):
@@ -39,6 +41,8 @@ hsv_cd = ColorDescriptor((8, 12, 3), feature=Feature.HSV)
 luv_cd = ColorDescriptor(feature=Feature.LUV)
 top_n_classes = 5
 clf = GoogLeNetClassifier(top_n=top_n_classes)
+start_time = time.time()
+count = 0
 
 # use glob to grab the image paths and loop over them
 for imagePath in glob.glob(args["dataset"] + "/*.png"):
@@ -46,11 +50,21 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
     # path and load the image itself
     imgObj = {}
     imgObj["ImageName"] = imagePath[imagePath.rfind("/") + 1:]
-    image = Image.open(imagePath)
+    image_url = None
+
+    if 'url' in args:
+        image_url = args['url'].strip('/') + '/' + imgObj["ImageName"]
+        file = cStringIO.StringIO(urllib.urlopen(image_url).read())
+        image_src = Image.open(file)
+        image = np.array(image_src)
+
+    if image_url is None:
+        image_src = Image.open(imagePath)
+        image = np.array(image_src)
 
     imgObj['HSVFeature'] = [x.item() for x in hsv_cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))]
     imgObj[Feature.LUV] = luv_cd.describe(image)
-    phash = imagehash.phash(image)
+    phash = imagehash.phash(image_src)
     imgObj["PHash"] = [x.item() for x in phash.hash.flatten()]
 
     # add labels
@@ -84,8 +98,16 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
     imgObj["md5"] = md5(imagePath)
     imgObj["CreateTime"] = datetime.datetime.utcnow()
     imgObj["UpdateTime"] = datetime.datetime.utcnow()
-    if 'url' in args:
+    if image_url is not None:
         imgObj["ImageUrl"] = args['url'].strip('/') + '/' + imgObj["ImageName"]
     imgObj["Path"] = "/" + imagePath
     # print(imgObj)
     db.ImageFeature.insert_one(imgObj)
+
+    count += 1
+    if count % 100 == 0:
+        print(count)
+        print(" --- %s seconds ---" % (time.time() - start_time))
+
+print(count)
+print("finish --- %s seconds ---" % (time.time() - start_time))
