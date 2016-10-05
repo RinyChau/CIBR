@@ -62,7 +62,7 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
         image_src = Image.open(imagePath)
         image = np.array(image_src)
 
-    imgObj['HSVFeature'] = [x.item() for x in hsv_cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))]
+    imgObj['HSVFeature'] = [x for x in hsv_cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))]
     imgObj[Feature.LUV] = luv_cd.describe(image)
     phash = imagehash.phash(image_src)
     imgObj["PHash"] = [x.item() for x in phash.hash.flatten()]
