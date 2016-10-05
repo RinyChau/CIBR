@@ -75,9 +75,9 @@ class Searcher:
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
-
-        dis_list = ((np.array(color_dis) / max(color_dis)) ** 2) + ((np.array(phash_dis) / 64) ** 2)
-        print(phash_dis)
+        color_dis_max = max(color_dis)
+        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + ((np.array(phash_dis) / 64) ** 2)
+        print(dis_list)
         # phash_dist = Distance.distance()
 
         # color_dis_order_index = np.argsort(x)
@@ -90,11 +90,6 @@ class Searcher:
                 image["path"] = image["ImageUrl"]
             else:
                 image["path"] = image["Path"]
-                if "124001.png" in image["Path"]:
-                    print(np.array_equal(image[self.feature_type], img_item[self.feature_type]))
-                    if not np.array_equal(image[self.feature_type], img_item[self.feature_type]):
-                        print(image[self.feature_type])
-                        print(img_item[self.feature_type])
         image_list.sort(key=lambda x: x["distance"])
         return image_list
 
