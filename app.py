@@ -21,12 +21,12 @@ img_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "upload")
 img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
 
 # initialize the image descriptor
-feature = Feature.LUV
+feature_type = Feature.LUV
 distance_type = DistanceType.L1
 
 top_n_classes = 5
 # initialize the searcher
-searcher = Searcher(DistanceType.L1, feature, top_n_classes)
+searcher = Searcher(DistanceType.L1, feature_type, top_n_classes)
 
 
 label = "labels"
