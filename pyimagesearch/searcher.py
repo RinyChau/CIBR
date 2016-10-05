@@ -9,11 +9,13 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 import cv2
 import imagehash
+from helper import Distance
 
 class DistanceType(Enum):
     CHISQUARE = 'ChiSquare'
     L1 = 'L1'
     L2 = 'L2'
+
 
 class Searcher:
     def __init__(self, dis_type=DistanceType.CHISQUARE, feature_type=Feature.HSV, top_n_classes=2):
@@ -68,12 +70,16 @@ class Searcher:
                     break
                 pre_labels.append(item["label"])
             img_item["pre_labels"] = pre_labels
-        print(img_item["pre_labels"])
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
-        print(len(img_item))
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
-        for image in image_list:
-            image["distance"] = 0
+        color_dis = Distance.distance(img_item[self.feature_type],
+                                      [img[self.feature_type] for img in image_list], self.dis_type)
+        # color_dis_order_index = np.argsort(x)
+
+        list_len = len(image_list)
+        for i in range(list_len):
+            image = image_list[i]
+            image["distance"] = color_dis[i]
             if "ImageUrl" in image:
                 image["path"] = image["ImageUrl"]
             else:

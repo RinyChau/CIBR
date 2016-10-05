@@ -24,7 +24,7 @@ img_url_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "url")
 feature = Feature.LUV
 distance_type = DistanceType.L1
 
-top_n_classes = 2
+top_n_classes = 5
 # initialize the searcher
 searcher = Searcher(DistanceType.L1, feature, top_n_classes)
 

@@ -8,7 +8,7 @@ class DistanceType(Enum):
     L2 = 'L2'
 
 
-def distance(self, query_hist, other_hists, type):
+def distance(query_hist, other_hists, type):
     if type == DistanceType.CHISQUARE:
         return chi2_distance(query_hist, other_hists)
     if type == DistanceType.L1:
@@ -16,14 +16,17 @@ def distance(self, query_hist, other_hists, type):
 
 
 def chi2_distance(query_hist, other_hists, eps=1e-10):
-    # compute the chi-squared distance
-    d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
-                      for (a, b) in zip(histA, histB)])
+    d = [(0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
+                        for (a, b) in zip(query_hist, other_hist)])) for other_hist in other_hists]
+    # # compute the chi-squared distance
+    # d = 0.5 * np.sum([((a - b) ** 2) / (a + b + eps)
+    #                   for (a, b) in zip(query_hist, other_hists)])
 
     # return the chi-squared distance
     return d
 
 
-def l1_distance(histA, histB):
-    d = np.sum([abs(a - b) for (a, b) in zip(histA, histB)])
+def l1_distance(query_hist, other_hists):
+    d = [np.sum([abs(a - b) for (a, b) in zip(query_hist, other_hist)]) for other_hist in other_hists]
+    # d = np.sum([abs(a - b) for (a, b) in zip(query_hist, other_hists)])
     return d
