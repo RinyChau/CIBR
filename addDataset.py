@@ -100,7 +100,7 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
     imgObj["UpdateTime"] = datetime.datetime.utcnow()
     if image_url is not None:
         imgObj["ImageUrl"] = args['url'].strip('/') + '/' + imgObj["ImageName"]
-    imgObj["Path"] = "/" + imagePath
+    imgObj["Path"] = "/" + imagePath[4:]
     # print(imgObj)
     db.ImageFeature.insert_one(imgObj)
 
