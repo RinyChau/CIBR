@@ -76,7 +76,7 @@ class Searcher:
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
         color_dis_max = max(color_dis)
-        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + ((np.array(phash_dis) / 64) ** 2)
+        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2)
         print(dis_list)
         # phash_dist = Distance.distance()
 
