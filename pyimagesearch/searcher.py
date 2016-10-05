@@ -8,7 +8,7 @@ from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 import cv2
-import imagehash
+
 from helper import Distance
 
 class DistanceType(Enum):
@@ -28,7 +28,7 @@ class Searcher:
         self.orb = cv2.ORB_create()
 
     def search(self, image):
-        phash = imagehash.phash(image)
+        phash = PHash.phash(image)
         image = np.array(image)
         pre_labels = self.classifier.predict(image).ravel()[::-1]
         pre_labels = [tags.split(',')[0] for tags in pre_labels]
@@ -42,7 +42,7 @@ class Searcher:
 
         img_item = {"labels": labels,
                     self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
-                    "PHash": phash.hash.flatten(), "pre_labels": pre_labels}
+                    "PHash": phash, "pre_labels": pre_labels}
 
         kp = self.orb.detect(image, None)
         # compute the descriptors with ORB
@@ -74,6 +74,10 @@ class Searcher:
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
+        phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
+
+        dis_list = np.array(color_dis) + np.array(phash_dis)
+        print(phash_dis)
         # phash_dist = Distance.distance()
 
         # color_dis_order_index = np.argsort(x)
@@ -81,7 +85,7 @@ class Searcher:
         list_len = len(image_list)
         for i in range(list_len):
             image = image_list[i]
-            image["distance"] = color_dis[i]
+            image["distance"] = dis_list[i].item()
             if "ImageUrl" in image:
                 image["path"] = image["ImageUrl"]
             else:

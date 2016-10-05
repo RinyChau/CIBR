@@ -1,6 +1,6 @@
 from enum import Enum
 import numpy as np
-
+import scipy.spatial.distance as dist
 
 class DistanceType(Enum):
     CHISQUARE = 'ChiSquare'
@@ -27,6 +27,6 @@ def chi2_distance(query_hist, other_hists, eps=1e-10):
 
 
 def l1_distance(query_hist, other_hists):
-    d = [np.sum([abs(a - b) for (a, b) in zip(query_hist, other_hist)]) for other_hist in other_hists]
+    d = [dist.cityblock(query_hist, other_hist) for other_hist in other_hists]
     # d = np.sum([abs(a - b) for (a, b) in zip(query_hist, other_hists)])
     return d
