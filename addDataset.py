@@ -8,7 +8,7 @@ import numpy as np
 from pymongo import MongoClient
 from PIL import Image
 from pyimagesearch.colordescriptor import Feature
-from sklearn_theano.feature_extraction import GoogLeNetClassifier
+# from sklearn_theano.feature_extraction import GoogLeNetClassifier
 import imagehash
 from helper import PicklePoints
 import urllib, cStringIO
@@ -40,7 +40,7 @@ db = client.CIBR
 hsv_cd = ColorDescriptor((8, 12, 3), feature=Feature.HSV)
 luv_cd = ColorDescriptor(feature=Feature.LUV)
 top_n_classes = 5
-clf = GoogLeNetClassifier(top_n=top_n_classes)
+# clf = GoogLeNetClassifier(top_n=top_n_classes)
 start_time = time.time()
 count = 0
 
@@ -68,21 +68,21 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
     imgObj["PHash"] = [x.item() for x in phash.hash.flatten()]
 
     # add labels
-    labels = clf.predict(image).ravel()[::-1]
-    probs = clf.predict_proba(image).ravel()[::-1]
-    if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
-        print("probs is not sorted")
-        break
-    label = []
-    top_n_prob = 0
-    length = len(labels)
-    for i in range(length):
-        tags = labels[i]
-        prob = probs[i]
-        top_n_prob += 1
-        for tag in tags.split(","):
-            label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i].item()})
-    imgObj["labels"] = label
+    # labels = clf.predict(image).ravel()[::-1]
+    # probs = clf.predict_proba(image).ravel()[::-1]
+    # if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
+    #     print("probs is not sorted")
+    #     break
+    # label = []
+    # top_n_prob = 0
+    # length = len(labels)
+    # for i in range(length):
+    #     tags = labels[i]
+    #     prob = probs[i]
+    #     top_n_prob += 1
+    #     for tag in tags.split(","):
+    #         label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i].item()})
+    # imgObj["labels"] = label
 
     # add orb feature
     gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
