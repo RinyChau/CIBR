@@ -1,9 +1,4 @@
-from pyimagesearch.colordescriptor import ColorDescriptor
-import cv2
-import hashlib
 from pymongo import MongoClient
-from skimage import io
-from pyimagesearch.colordescriptor import Feature
 import time
 from PIL import Image
 import urllib, cStringIO
