@@ -70,6 +70,7 @@ class Searcher:
         orb_dis_max = max(orb_dis)
         dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
                    + ((np.array(orb_dis) * 1.0 / orb_dis_max) ** 2)
+        print(orb_dis)
         list_len = len(image_list)
         for i in range(list_len):
             image = image_list[i]
