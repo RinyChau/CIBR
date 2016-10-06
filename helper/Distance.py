@@ -27,8 +27,9 @@ def chi2_distance(query_hist, other_hists, eps=1e-10):
     # return the chi-squared distance
     return d
 
-
 MAX_DISTANCE = 256
+
+
 def orb_distance(kp_des, other_kp_dess):
     index_params = dict(algorithm=6, table_number=12, key_size=20, multi_probe_level=2)
     search_params = dict(checks=50)  # or pass empty dictionary
@@ -46,13 +47,11 @@ def orb_distance(kp_des, other_kp_dess):
                 tmp_dis = MAX_DISTANCE
         count = len(matches)
         if count > 5:
-            dis.append(tmp_dis / count)
+            dis.append(tmp_dis * 1.0 / count)
         else:
-            dis.append(1)
-    print(max([match[1].distance if len(match) > 1 else 0 for match in matches]))
+            dis.append(MAX_DISTANCE)
+        print(max([match[1].distance if len(match) > 1 else 0 for match in matches]))
     return dis
-
-
 
 
 def l1_distance(query_hist, other_hists):
