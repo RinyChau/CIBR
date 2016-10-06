@@ -11,6 +11,7 @@ import cv2
 
 from helper import Distance
 
+
 class DistanceType(Enum):
     CHISQUARE = 'ChiSquare'
     L1 = 'L1'
@@ -46,9 +47,8 @@ class Searcher:
 
         kp = self.orb.detect(image, None)
         # compute the descriptors with ORB
-        kp, des = self.orb.compute(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY), kp)
-        orb_feature = PicklePoints.pickle_keypoints(kp, des)
-        img_item["ORB"] = orb_feature
+        img_item["kp"], img_item["des"] = self.orb.compute(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY), kp)
+
         return self.search_by_features(img_item=img_item)
         # return self.search_by_features(img_item)
         # image_list = ImageDB.getListByLabels(labels=labels)
@@ -57,31 +57,19 @@ class Searcher:
 
     def search_by_features(self, img_item):
         if "pre_labels" not in img_item:
-            pre_labels = []
-            length = img_item["labels"]
-            rank = 0
-            for i in range(len(length)):
-                item = img_item[i]
-                if rank != item["rank"]:
-                    rank = item["rank"]
-                else:
-                    continue
-                if rank > self.top_n_classes:
-                    break
-                pre_labels.append(item["label"])
-            img_item["pre_labels"] = pre_labels
+            img_item["pre_labels"] = self.parse_label(img_item["labels"])
+        if "kp" not in img_item or "des" not in img_item:
+            img_item["kp"], img_item["des"] = PicklePoints.unpickle_keypoints(img_item["ORB"])
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
+        orb_dis = Distance.orb_distance()
         color_dis_max = max(color_dis)
-        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2)
-        print(dis_list)
-        # phash_dist = Distance.distance()
-
-        # color_dis_order_index = np.argsort(x)
-
+        orb_dis_max = max(orb_dis)
+        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
+                   + ((np.array(orb_dis) * 1.0 / orb_dis_max) ** 2)
         list_len = len(image_list)
         for i in range(list_len):
             image = image_list[i]
@@ -123,6 +111,21 @@ class Searcher:
         # results = results[:1000]
 
         return results[:limit]
+
+    def parse_label(self, labels):
+        pre_labels = []
+        length = len(labels)
+        rank = 0
+        for i in range(length):
+            item = labels[i]
+            if rank != item["rank"]:
+                rank = item["rank"]
+            else:
+                continue
+            if rank > self.top_n_classes:
+                break
+            pre_labels.append(item["label"])
+        return pre_labels
 
 # def parse_label(labels):
 #     label_list = []
