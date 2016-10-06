@@ -65,7 +65,8 @@ class Searcher:
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
-        orb_dis = Distance.orb_distance()
+        orb_dis = Distance.orb_distance((img_item["kp"], img_item["des"]),
+                                        [PicklePoints.unpickle_keypoints(x["ORB"]) for x in image_list])
         color_dis_max = max(color_dis)
         orb_dis_max = max(orb_dis)
         dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
