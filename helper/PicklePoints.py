@@ -21,5 +21,5 @@ def unpickle_keypoints(array):
                                     _octave=point[4], _class_id=point[5])
         temp_descriptor = point[6]
         keypoints.append(temp_feature)
-        descriptors.append(temp_descriptor.tolist())
-    return keypoints, np.array(descriptors)
+        descriptors.append(temp_descriptor)
+    return keypoints, np.array(descriptors, dtype=np.uint8)
