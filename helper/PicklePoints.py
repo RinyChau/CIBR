@@ -8,7 +8,7 @@ def pickle_keypoints(keypoints, descriptors):
     for point in keypoints:
         temp = (point.pt, point.size, point.angle, point.response, point.octave,
                 point.class_id, descriptors[i].tolist())
-        ++i
+        i += 1
         temp_array.append(temp)
     return temp_array
 
@@ -22,4 +22,4 @@ def unpickle_keypoints(array):
         temp_descriptor = point[6]
         keypoints.append(temp_feature)
         descriptors.append(temp_descriptor)
-    return keypoints, np.array(descriptors, dtype=np.uint8)
+    return keypoints, np.array(descriptors, dtype=np.uin)

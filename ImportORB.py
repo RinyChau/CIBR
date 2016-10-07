@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 
 # initialize mongodb client
-client = MongoClient("127.0.0.1:5988")
+client = MongoClient()
 
 # Content-based image retrieval database
 db = client.CIBR
