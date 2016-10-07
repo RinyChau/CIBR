@@ -27,7 +27,8 @@ def chi2_distance(query_hist, other_hists, eps=1e-10):
     # return the chi-squared distance
     return d
 
-MAX_DISTANCE = 256
+
+MAX_DISTANCE = 128
 
 
 def orb_distance(kp_des, other_kp_dess):
