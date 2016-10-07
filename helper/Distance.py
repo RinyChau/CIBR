@@ -35,7 +35,6 @@ def orb_distance(kp_des, other_kp_dess):
     search_params = dict(checks=50)  # or pass empty dictionary
     flann = cv2.FlannBasedMatcher(index_params, search_params)
     kp1, des1 = kp_des
-    des1 = np.float32(des1)
     dis = []
     for other_kp_des in other_kp_dess:
         kp2, des2 = other_kp_des
