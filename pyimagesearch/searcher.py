@@ -9,8 +9,6 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 import cv2
 
-from helper import Distance
-
 
 class DistanceType(Enum):
     CHISQUARE = 'ChiSquare'
@@ -45,9 +43,9 @@ class Searcher:
                     self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
                     "PHash": phash, "pre_labels": pre_labels}
         image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        kp = self.orb.detect(image_gray, None)
+        print(image_gray)
         # compute the descriptors with ORB
-        img_item["kp"], img_item["des"] = self.orb.compute(image_gray, kp)
+        img_item["kp"], img_item["des"] = self.orb.detectAndCompute(image_gray, None)
 
         return self.search_by_features(img_item=img_item)
         # return self.search_by_features(img_item)
@@ -65,8 +63,10 @@ class Searcher:
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
+        print("phash_dis still okay")
         orb_dis = Distance.orb_distance((img_item["kp"], img_item["des"]),
                                         [PicklePoints.unpickle_keypoints(x["ORB"]) for x in image_list])
+        print("orb_dis still okay")
         color_dis_max = max(color_dis)
         orb_dis_max = max(orb_dis)
         dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
