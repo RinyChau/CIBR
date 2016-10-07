@@ -44,10 +44,10 @@ class Searcher:
         img_item = {"labels": labels,
                     self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
                     "PHash": phash, "pre_labels": pre_labels}
-
-        kp = self.orb.detect(image, None)
+        image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        kp = self.orb.detect(image_gray, None)
         # compute the descriptors with ORB
-        img_item["kp"], img_item["des"] = self.orb.compute(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY), kp)
+        img_item["kp"], img_item["des"] = self.orb.compute(image_gray, kp)
 
         return self.search_by_features(img_item=img_item)
         # return self.search_by_features(img_item)
