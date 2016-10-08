@@ -87,6 +87,7 @@ for imagePath in all_imgs:
     except Exception, e:
         print(e)
         print("cannot get hsv luv:" + imagePath)
+        continue
 
     # add labels
     try:
@@ -111,15 +112,20 @@ for imagePath in all_imgs:
             label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i].item()})
     imgObj["labels"] = label
 
-    # add orb feature
-    gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    # Initiate STAR detector
-    orb = cv2.ORB_create()
-    # find the keypoints with ORB
-    kp = orb.detect(gray_image, None)
-    # compute the descriptors with ORB
-    kp, des = orb.compute(gray_image, kp)
-    orb_feature = PicklePoints.pickle_keypoints(kp, des)
+    try:
+        # add orb feature
+        gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        # Initiate STAR detector
+        orb = cv2.ORB_create()
+        # find the keypoints with ORB
+        kp = orb.detect(gray_image, None)
+        # compute the descriptors with ORB
+        kp, des = orb.compute(gray_image, kp)
+        orb_feature = PicklePoints.pickle_keypoints(kp, des)
+    except Exception, e:
+        print(e)
+        print("cannot get orb:" + imagePath)
+        continue
     imgObj["ORB"] = orb_feature
 
     imgObj["md5"] = md5(imagePath)
