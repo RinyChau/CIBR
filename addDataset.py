@@ -54,6 +54,7 @@ for imagePath in all_imgs:
     # extract the image ID (i.e. the unique filename) from the image
     try:
         im = Image.open(imagePath)
+        im.verify()
     except:
         print("cannot get image" + imagePath)
         continue
@@ -84,8 +85,14 @@ for imagePath in all_imgs:
     imgObj["PHash"] = [x.item() for x in phash.hash.flatten()]
 
     # add labels
-    labels = clf.predict(image).ravel()[::-1]
-    probs = clf.predict_proba(image).ravel()[::-1]
+    try:
+        labels = clf.predict(image).ravel()[::-1]
+        probs = clf.predict_proba(image).ravel()[::-1]
+    except Exception, e:
+        print(e)
+        print("can not predict image" + imagePath)
+        print("shape:" + str(image.shape))
+        continue
     if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
         print("probs is not sorted")
         break
