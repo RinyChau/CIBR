@@ -47,7 +47,7 @@ count = 0
 all_imgs = []
 for path, subdirs, files in os.walk(args["dataset"]):
     for name in files:
-        all_imgs.apped(os.path.join(path, name))
+        all_imgs.append(os.path.join(path, name))
 
 # use glob to grab the image paths and loop over them
 for imagePath in all_imgs:
