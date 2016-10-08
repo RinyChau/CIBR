@@ -35,7 +35,7 @@ client = MongoClient()
 
 # Content-based image retrieval database
 db = client.CIBR
-
+collection = db.ImageFeature
 # initialize the color descriptor
 hsv_cd = ColorDescriptor((8, 12, 3), feature=Feature.HSV)
 luv_cd = ColorDescriptor(feature=Feature.LUV)
@@ -47,6 +47,10 @@ count = 0
 # use glob to grab the image paths and loop over them
 for imagePath in glob.glob(args["dataset"] + "/*.png"):
     # extract the image ID (i.e. the unique filename) from the image
+    file_md5 = md5(imagePath)
+    same_imgs = list(collection.find({"": file_md5}))
+    if len(same_imgs) > 0:
+        continue
     # path and load the image itself
     imgObj = {}
     imgObj["ImageName"] = imagePath[imagePath.rfind("/") + 1:]
@@ -100,9 +104,9 @@ for imagePath in glob.glob(args["dataset"] + "/*.png"):
     imgObj["UpdateTime"] = datetime.datetime.utcnow()
     if image_url is not None:
         imgObj["ImageUrl"] = args['url'].strip('/') + '/' + imgObj["ImageName"]
-    imgObj["Path"] = "/" + imagePath[4:]
+    imgObj["Path"] = "/" + imagePath
     # print(imgObj)
-    db.ImageFeature.insert_one(imgObj)
+    collection.insert_one(imgObj)
 
     count += 1
     if count % 100 == 0:
