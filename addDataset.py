@@ -61,6 +61,7 @@ for imagePath in all_imgs:
     file_md5 = md5(imagePath)
     same_imgs = list(collection.find({"": file_md5}))
     if len(same_imgs) > 0:
+        print("same image" + imagePath)
         continue
     # path and load the image itself
     imgObj = {}
