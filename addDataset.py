@@ -13,7 +13,7 @@ import imagehash
 from helper import PicklePoints
 import urllib, cStringIO
 import time
-
+import os
 
 def md5(fname):
     hash_md5 = hashlib.md5()
@@ -44,9 +44,20 @@ clf = GoogLeNetClassifier(top_n=top_n_classes)
 start_time = time.time()
 count = 0
 
+all_imgs = []
+for path, subdirs, files in os.walk(args["dataset"]):
+    for name in files:
+        all_imgs.apped(os.path.join(path, name))
+
 # use glob to grab the image paths and loop over them
-for imagePath in glob.glob(args["dataset"] + "/*.png"):
+for imagePath in all_imgs:
     # extract the image ID (i.e. the unique filename) from the image
+    try:
+        im = Image.open(imagePath)
+    except:
+        print("cannot get image" + imagePath)
+        continue
+
     file_md5 = md5(imagePath)
     same_imgs = list(collection.find({"": file_md5}))
     if len(same_imgs) > 0:
