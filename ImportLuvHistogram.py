@@ -34,13 +34,14 @@ for imgItem in imgList:
     if image is None and "ImageUrl" in imgItem:
         try:
             image = io.imread(imgItem["ImageUrl"])
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
         except:
             print("unable to fetch image:%s", imgItem["ImageUrl"])
 
     if image is None and "Path" in imgItem:
         try:
             image = cv2.imread("." + imgItem["Path"])
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         except:
             print("unable to fetch image:%s", imgItem["Path"])
 

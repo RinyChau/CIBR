@@ -40,7 +40,7 @@ class Searcher:
             labels.append({"label": pre_labels[i], "rank": rank, 'prob': probs[i].item()})
 
         img_item = {"labels": labels,
-                    self.feature_type: self.cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR)),
+                    self.feature_type: self.cd.describe(image),
                     "PHash": phash, "pre_labels": pre_labels}
         image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         # compute the descriptors with ORB

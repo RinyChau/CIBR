@@ -10,7 +10,6 @@ from pyimagesearch.searcher import Searcher
 from pyimagestore.imgManagement import ImgManagement
 from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
-import numpy as np
 import urllib, cStringIO, thread
 
 from PIL import Image

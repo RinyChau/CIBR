@@ -32,7 +32,7 @@ class ColorDescriptor:
     def describe_hsv(self, image):
         # convert the image to the HSV color space and initialize
         # the features used to quantify the image
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
         features = []
 
         # grab the dimensions and compute the center of the image
@@ -73,7 +73,7 @@ class ColorDescriptor:
         return features
 
     def describe_luv(self, image):
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2LUV)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2LUV)
         segments = self.getSegements(image)
         center = self.getCenterMask(image)
 

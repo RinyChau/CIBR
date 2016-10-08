@@ -10,6 +10,8 @@ import urllib
 from random import randint
 import hashlib
 import cv2
+import urllib, cStringIO
+from PIL import Image
 
 class ImgManagement:
 
@@ -60,7 +62,7 @@ class ImgManagement:
             if ImageDB.getItem({"md5": md5}) is not None:
                 ImgManagement.deleteFile(path)
             else:
-                image = cv2.imread(path)
+                image = Image.open(path)
                 cd = ColorDescriptor((8, 12, 3))
                 features = cd.describe(image)
                 ImageDB.insert(md5, features, path)
