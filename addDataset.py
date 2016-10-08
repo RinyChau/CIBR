@@ -52,37 +52,41 @@ for path, subdirs, files in os.walk(args["dataset"]):
 # use glob to grab the image paths and loop over them
 for imagePath in all_imgs:
     # extract the image ID (i.e. the unique filename) from the image
+    print(imagePath)
     try:
         im = Image.open(imagePath)
         im.verify()
     except:
         print("cannot get image" + imagePath)
         continue
+    try:
+        file_md5 = md5(imagePath)
+        same_imgs = list(collection.find({"md5": file_md5}))
+        if len(same_imgs) > 0:
+            print("same image" + imagePath)
+            continue
+        # path and load the image itself
+        imgObj = {}
+        imgObj["ImageName"] = imagePath[imagePath.rfind("/") + 1:]
+        image_url = None
 
-    file_md5 = md5(imagePath)
-    same_imgs = list(collection.find({"md5": file_md5}))
-    if len(same_imgs) > 0:
-        print("same image" + imagePath)
-        continue
-    # path and load the image itself
-    imgObj = {}
-    imgObj["ImageName"] = imagePath[imagePath.rfind("/") + 1:]
-    image_url = None
+        if 'url' in args and args['url'] is not None:
+            image_url = args['url'].strip('/') + '/' + imgObj["ImageName"]
+            file = cStringIO.StringIO(urllib.urlopen(image_url).read())
+            image_src = Image.open(file)
+            image = np.array(image_src)
 
-    if 'url' in args and args['url'] is not None:
-        image_url = args['url'].strip('/') + '/' + imgObj["ImageName"]
-        file = cStringIO.StringIO(urllib.urlopen(image_url).read())
-        image_src = Image.open(file)
-        image = np.array(image_src)
+        if image_url is None:
+            image_src = Image.open(imagePath)
+            image = np.array(image_src)
 
-    if image_url is None:
-        image_src = Image.open(imagePath)
-        image = np.array(image_src)
-
-    imgObj[Feature.HSV] = [x for x in hsv_cd.describe(image)]
-    imgObj[Feature.LUV] = luv_cd.describe(image)
-    phash = imagehash.phash(image_src)
-    imgObj["PHash"] = [x.item() for x in phash.hash.flatten()]
+        imgObj[Feature.HSV] = [x for x in hsv_cd.describe(image)]
+        imgObj[Feature.LUV] = luv_cd.describe(image)
+        phash = imagehash.phash(image_src)
+        imgObj["PHash"] = [x.item() for x in phash.hash.flatten()]
+    except Exception, e:
+        print(e)
+        print("cannot get hsv luv:" + imagePath)
 
     # add labels
     try:
