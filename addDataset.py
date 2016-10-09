@@ -8,13 +8,12 @@ import numpy as np
 from pymongo import MongoClient
 from PIL import Image
 from pyimagesearch.colordescriptor import Feature
-from sklearn_theano.feature_extraction import GoogLeNetClassifier
 import imagehash
 from helper import PicklePoints
 import urllib, cStringIO
 import time
 import os
-from pyimagesearch import CNNClassifier
+from pyimagesearch.CNNClassifier import CNNClassifier
 
 def md5(fname):
     hash_md5 = hashlib.md5()
