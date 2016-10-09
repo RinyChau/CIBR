@@ -34,23 +34,20 @@ for imgItem in imgList:
     #     "ImageUrl"] != "http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/127503.png":
     #     continue
     image = None
+
+    if image is None and "Path" in imgItem:
+        try:
+            file_path = "." + imgItem["Path"]
+            image = np.array(Image.open(file_path, 'r'))
+        except:
+            print("unable to fetch image:%s", imgItem["Path"])
+
     if image is None and "ImageUrl" in imgItem:
         try:
             file = cStringIO.StringIO(urllib.urlopen(imgItem["ImageUrl"]).read())
             image = np.array(Image.open(file))
-
-            # image = io.imread(imgItem["ImageUrl"])
-            # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         except:
             print("unable to fetch image:%s", imgItem["ImageUrl"])
-
-    if image is None and "Path" in imgItem:
-        try:
-            file_path = "./app" + imgItem["Path"]
-            image = np.array(Image.open(file_path, 'r'))
-            # image = cv2.imread("." + imgItem["Path"])
-        except:
-            print("unable to fetch image:%s", imgItem["Path"])
 
     if image is None and "Path" not in imgItem and "ImageUrl" not in imgItem:
         print("unable to fetch image:%s", imgItem)
