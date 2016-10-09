@@ -23,7 +23,7 @@ client = MongoClient()
 # Content-based image retrieval database
 db = client.CIBR
 collection = db.ImageFeature
-imgList = list(collection.find())
+imgList = collection.find()
 count = 0
 start_time = time.time()
 top_n_classes = 5
