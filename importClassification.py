@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import time
 import urllib, cStringIO
 import numpy as np
-
+from pyimagesearch.CNNClassifier import CNNClassifier
 from sklearn_theano.feature_extraction import GoogLeNetClassifier
 from PIL import Image
 
@@ -19,7 +19,7 @@ def md5(fname):
 
 
 # initialize mongodb client
-client = MongoClient("127.0.0.1:5988")
+client = MongoClient()
 
 # Content-based image retrieval database
 db = client.CIBR
@@ -28,7 +28,7 @@ imgList = list(collection.find())
 count = 0
 start_time = time.time()
 top_n_classes = 5
-clf = GoogLeNetClassifier(top_n=top_n_classes)
+clf = CNNClassifier(top_n_classes=top_n_classes)
 for imgItem in imgList:
     # if "ImageUrl" not in imgItem or imgItem[
     #     "ImageUrl"] != "http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/127503.png":
