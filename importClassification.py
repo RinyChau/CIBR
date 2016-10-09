@@ -6,7 +6,6 @@ import time
 import urllib, cStringIO
 import numpy as np
 from pyimagesearch.CNNClassifier import CNNClassifier
-from sklearn_theano.feature_extraction import GoogLeNetClassifier
 from PIL import Image
 
 
