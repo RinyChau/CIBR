@@ -41,7 +41,7 @@ collection = db.ImageFeature
 hsv_cd = ColorDescriptor((8, 12, 3), feature=Feature.HSV)
 luv_cd = ColorDescriptor(feature=Feature.LUV)
 top_n_classes = 5
-clf = CNNClassifier(top_n=top_n_classes)
+clf = CNNClassifier(top_n_classes=top_n_classes)
 start_time = time.time()
 count = 0
 
