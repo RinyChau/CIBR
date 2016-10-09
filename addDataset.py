@@ -14,6 +14,7 @@ from helper import PicklePoints
 import urllib, cStringIO
 import time
 import os
+from pyimagesearch import CNNClassifier
 
 def md5(fname):
     hash_md5 = hashlib.md5()
@@ -40,7 +41,7 @@ collection = db.ImageFeature
 hsv_cd = ColorDescriptor((8, 12, 3), feature=Feature.HSV)
 luv_cd = ColorDescriptor(feature=Feature.LUV)
 top_n_classes = 5
-clf = GoogLeNetClassifier(top_n=top_n_classes)
+clf = CNNClassifier(top_n=top_n_classes)
 start_time = time.time()
 count = 0
 
