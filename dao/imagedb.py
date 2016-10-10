@@ -31,7 +31,7 @@ class ImageDB:
     def getListByLabels(labels):
         try:
             # dbQuery = {"$and":[{"labels.label":label,"top_n_prob":1} for label in labels]}
-            dbQuery = {"labels": {"$elemMatch": {"label1": {"$in": labels}}},}
+            dbQuery = {"labels.label1": {"$in": labels}},
             img_list = list(ImageDB.collection.find(dbQuery))
             return img_list
         except:
