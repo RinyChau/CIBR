@@ -9,7 +9,7 @@ from pymongo import MongoClient
 from PIL import Image
 from pyimagesearch.colordescriptor import Feature
 import imagehash
-from helper import PicklePoints
+from helper import PicklePoints, Labels
 import urllib, cStringIO
 import time
 import os
@@ -91,8 +91,7 @@ for imagePath in all_imgs:
 
     # add labels
     try:
-        labels = clf.predict(image).ravel()[::-1]
-        probs = clf.predict_proba(image).ravel()[::-1]
+        labels, probs = clf.predict_label_proba(image)
     except Exception, e:
         print(e)
         print("can not predict image" + imagePath)
@@ -101,16 +100,7 @@ for imagePath in all_imgs:
     if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
         print("probs is not sorted")
         break
-    label = []
-    top_n_prob = 0
-    length = len(labels)
-    for i in range(length):
-        tags = labels[i]
-        prob = probs[i]
-        top_n_prob += 1
-        for tag in tags.split(","):
-            label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i].item()})
-    imgObj["labels"] = label
+    imgObj["labels"] = Labels.convert_to_dic(labels, probs)
 
     try:
         # add orb feature

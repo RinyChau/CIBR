@@ -28,8 +28,6 @@ top_n_classes = 5
 searcher = Searcher(DistanceType.L1, feature_type, top_n_classes)
 
 
-label = "labels"
-
 # main route
 @app.route('/')
 def index():

@@ -7,6 +7,7 @@ import urllib, cStringIO
 import numpy as np
 from pyimagesearch.CNNClassifier import CNNClassifier
 from PIL import Image
+from helper import Labels
 
 
 def md5(fname):
@@ -54,22 +55,8 @@ for imgItem in imgList:
     if image is None:
         continue
 
-    labels = clf.predict(image).ravel()[::-1]
-    probs = clf.predict_proba(image).ravel()[::-1]
-    if not all(probs[i] >= probs[i + 1] for i in xrange(len(probs) - 1)):
-        print("probs is not sorted")
-        break
-    label = []
-    top_n_prob = 0
-    length = len(labels)
-    for i in range(length):
-        tags = labels[i]
-        prob = probs[i]
-        top_n_prob += 1
-        for tag in tags.split(","):
-            label.append({"label": tag, "rank": top_n_prob, 'prob': probs[i].item()})
-
-    imgItem["labels"] = label
+    labels, probs = clf.predict_label_proba(image)
+    imgItem["labels"] = Labels.convert_to_dic(labels, probs)
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
 
 

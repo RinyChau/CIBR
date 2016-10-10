@@ -8,6 +8,7 @@ from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 import cv2
+from helper import Labels
 
 
 class DistanceType(Enum):
@@ -29,19 +30,10 @@ class Searcher:
     def search(self, image):
         phash = PHash.phash(image)
         image = np.array(image)
-        pre_labels = self.classifier.predict(image).ravel()[::-1]
-        pre_labels = [tags.split(',')[0] for tags in pre_labels]
-        probs = self.classifier.predict_proba(image).ravel()[::-1]
-        labels = []
-        length = len(pre_labels)
-        rank = 0
-        for i in range(length):
-            rank += 1
-            labels.append({"label": pre_labels[i], "rank": rank, 'prob': probs[i].item()})
-
-        img_item = {"labels": labels,
+        labels, probs = self.classifier.predict_label_proba(image)
+        img_item = {"labels": Labels.convert_to_dic(labels, probs),
                     self.feature_type: self.cd.describe(image),
-                    "PHash": phash, "pre_labels": pre_labels}
+                    "PHash": phash}
         image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         # compute the descriptors with ORB
         img_item["kp"], img_item["des"] = self.orb.detectAndCompute(image_gray, None)
@@ -54,7 +46,7 @@ class Searcher:
 
     def search_by_features(self, img_item):
         if "pre_labels" not in img_item:
-            img_item["pre_labels"] = self.parse_label(img_item["labels"])
+            img_item["pre_labels"] = Labels.convert_to_label_array(img_item["labels"])
         if "kp" not in img_item or "des" not in img_item:
             img_item["kp"], img_item["des"] = PicklePoints.unpickle_keypoints(img_item["ORB"])
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
@@ -109,21 +101,6 @@ class Searcher:
         # results = results[:1000]
 
         return results[:limit]
-
-    def parse_label(self, labels):
-        pre_labels = []
-        length = len(labels)
-        rank = 0
-        for i in range(length):
-            item = labels[i]
-            if rank != item["rank"]:
-                rank = item["rank"]
-            else:
-                continue
-            if rank > self.top_n_classes:
-                break
-            pre_labels.append(item["label"])
-        return pre_labels
 
 # def parse_label(labels):
 #     label_list = []
