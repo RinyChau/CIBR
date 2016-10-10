@@ -39,6 +39,9 @@ def orb_distance(kp_des, other_kp_dess):
     dis = []
     for other_kp_des in other_kp_dess:
         kp2, des2 = other_kp_des
+        if des2.size == 0:
+            dis.append(MAX_DISTANCE)
+            continue
         matches = flann.knnMatch(des1, des2, k=2)
         matches = [match[0].distance if len(match) > 0 else MAX_DISTANCE for match in matches]
         count = len(matches)
