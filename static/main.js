@@ -101,8 +101,8 @@ $(function() {
                 var data = result.results;
                 for (i = 0; i < data.length; i++) {
                     $("#results").append('<tr><th><a href="' + data[i]["path"] + '"><img src="' + data[i]["path"] +
-                        '" class="result-img"></a></th><th>' + data[i]['distance'] + '</th><th>' + data[i]['labels'][0]['label'] +
-                        '</th><th>' + data[i]['labels'][0]['prob'] + '</th></tr>')
+                        '" class="result-img"></a></th><th>' + data[i]['distance'] + '</th><th>' + data[i]['labels']['label1'] +
+                        '</th><th>' + data[i]['labels']['prob1'] + '</th></tr>')
                 }
                 ;
                 $("#results-table").show();
