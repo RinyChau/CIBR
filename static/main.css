@@ -1,13 +1,116 @@
-.center-container {
-  text-align: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
+.search-btn {
+    font-size: 18px;
+    width: 100px;
+    height: 38px;
+    background-color: #5094CD;
+    padding: 0px !important;
+    margin-right: 8px;
+    color: #fff;
+    outline: none !important;
 }
- 
-.active {
-  border: 5px solid red;
+
+.url-input {
+    height: 38px;
+    min-width: 300px;
+    border-right:0;
 }
-.result-img {
-  max-width: 100px;
-  max-height: 100px;
+
+#clear .btn {
+    padding: 0px 12px;
+    height: 100%;
+}
+#clear {
+	border-right: 0;
+	border-left: 0;
+	height: 38px;
+	display: table-cell;
+	vertical-align: center;
+}
+#clear .glyphicon {
+	margin-top: 7px;
+	font-size: 18px;
+	color: #889;
+}
+.header{
+    background-color: white;
+    height:113px;
+}
+body {
+	font-family: "Maven Pro", Helvetica, sans-serif;
+	color: #f4f4f4;
+	overflow-y: scroll;
+	margin: 0px;
+	height: 100%;
+	background: #fff url("dist/intro5.jpg") no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+/* Bootstrap import */
+.navbar {
+  position: relative;
+  min-height: 50px;
+  box-sizing: border-box;
+}
+
+#subheader {
+	color: #FFF;
+	height: 50px;
+	z-index:200;
+	position: relative;
+	margin-bottom:1em;
+	padding: 10px;
+	background: url("dist/overlay.png"), linear-gradient(130deg, #9d0a0e, #ed1c24, #f26529, #f7931d);
+}
+
+/* Imported classes from our new homepage for an equal design layout */
+.pxl-inner-container {
+	max-width: 1030px; /*5 image columns*/
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	/*overflow: hidden;*/
+	height: 100%;
+}
+
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+#search_bar {
+	position: relative;
+	text-align: left;
+	font-size: 12px;
+	z-index: 20;
+	float:left;
+}
+
+#search_bar>ul{
+	float:left;
+	list-style: none;
+	position:relative;
+	margin: 0;
+	padding: 0;
+}
+
+#content {
+	position: relative;
+	margin: 0 auto;
+	height: 100%;
+	max-width: 1055px; /*4 image columns*/
+}
+
+#results {
+	width: 1030px;
+    z-index: 0;
+    text-align: center;
+	background: #fff;
+	margin: 0px auto;
+
 }

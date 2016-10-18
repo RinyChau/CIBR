@@ -1,53 +1,5 @@
-$("#searching").hide();
-$("#results-table").hide();
-$("#error").hide();
-
-// global
-//var url = 'http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/';
-//var data = [];
-
-$(function() {
-
-    // sanity check
+$(function () {
     console.log("ready!");
-
-    // image click
-    $(".img").click(function() {
-        $(".img").removeClass("active")
-        // add active class to clicked picture
-        $(this).addClass("active")
-
-        // grab image url
-        var url = $(this).attr("src")
-        console.log(url)
-        data = {url: url, img: null}
-        searchImg(data);
-    });
-
-    $("#upload-image").submit(function (event) {
-        // prevent default event
-        event.preventDefault();
-
-        var url = $("#pic-url").val();
-        var img = $("#pic-src")[0].files;
-        if (uploadImg && (!img || !img[0])) {
-            alert("please upload image first or enter the image url");
-            return;
-        }
-        if (!uploadImg && !isURL(url)) {
-            alert("please upload image first or enter the image url");
-            return;
-        }
-        if (!isURL(url) && (!img || !img[0])) {
-            alert("please upload image first or enter the image url");
-            return;
-        }
-        var formData = new FormData($("#upload-image")[0]);
-        if (!uploadImg) {
-            formData.delete("img");
-        }
-        searchImg(formData);
-    });
 
     $("#pic-src").change(function () {
         readURL($(this)[0]);
@@ -81,12 +33,46 @@ $(function() {
         }
     }
 
+
+    $("#upload-image").submit(function (event) {
+        // prevent default event
+        event.preventDefault();
+
+        var url = $("#pic-url").val();
+        var img = $("#pic-src")[0].files;
+        if (uploadImg && (!img || !img[0])) {
+            alert("please upload image first or enter the image url");
+            return;
+        }
+        if (!uploadImg && !isURL(url)) {
+            alert("please upload image first or enter the image url");
+            return;
+        }
+        if (!isURL(url) && (!img || !img[0])) {
+            alert("please upload image first or enter the image url");
+            return;
+        }
+        var formData = new FormData($("#upload-image")[0]);
+        if (!uploadImg) {
+            formData.delete("img");
+        }
+        searchImg(formData);
+    });
+
+
+    $("#upload_img_submit").click(function () {
+        event.preventDefault();
+        $("#upload-image").submit();
+    });
+
+
     function searchImg(data) {
 
         // empty/hide results
-        $("#results").empty();
-        $("#results-table").hide();
-        $("#error").hide();
+        $("#img_gallery").html("");
+        //$("#results").empty();
+        //$("#results-table").hide();
+        //$("#error").hide();
 
         // show searching text
         $("#searching").show();
@@ -100,18 +86,19 @@ $(function() {
                 console.log(result.results);
                 var data = result.results;
                 for (i = 0; i < data.length; i++) {
-                    $("#results").append('<tr><th><a href="' + data[i]["path"] + '"><img src="' + data[i]["path"] +
-                        '" class="result-img"></a></th><th>' + data[i]['distance'] + '</th><th>' + data[i]['labels']['label1'] +
-                        '</th><th>' + data[i]['labels']['prob1'] + '</th></tr>')
-                }
-                ;
+                    var html_str = "<div class='col-lg-3 col-md-4 col-xs-6 thumb'><a class='thumbnail' href='#'>"+"<img class='img-responsive' src='"+data[i]["path"]+"' alt=''>";
+                        " </a></div>";
+                    $("#results").append(html_str);
+                    //$("#results").append('<tr><th><a href="' + data[i]["path"] + '"><img src="' + data[i]["path"] +
+                    //    '" class="result-img"></a></th><th>' + data[i]['distance'] + '</th><th>' + data[i]['labels']['label1'] +
+                    //    '</th><th>' + data[i]['labels']['prob1'] + '</th></tr>')
+                };
                 $("#results-table").show();
             },
             // handle error
             error: function (error) {
                 console.log(error);
-                // append to dom
-                $("#error").append(error)
+                window.alert("can not retrieve image, please try again later");
             },
             //Options to tell jQuery not to process data or worry about content-type.
             cache: false,
@@ -124,5 +111,4 @@ $(function() {
         $.ajax(ajaxParam);
 
     }
-
 });

@@ -5,22 +5,25 @@
         <div class="row header">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <form class="form" style="padding-top: 30px;">
+                <form class="form" style="padding-top: 30px;" id="upload-image" enctype="multipart/form-data">
                     <div class="input-group">
                         <input type="text" class="form-control url-input"
                                placeholder="Enter an Image Url or upload an file"
-                               aria-describedby="basic-addon2">
+                               aria-describedby="basic-addon2" id="pic-url" name="url">
                 <span class="input-group-btn">
                     <div id="clear" class="ui-widget ui-widget-content"
                          style="height: 38px;border: 1px solid #ccc;border-left: 0;border-top-right-radius: 0;">
-                        <a class="btn" type="button" title="Upload Image">
-                            <img class="st_camera" src="{{ url_for('static',filename='dist/camera.png') }}"
-                                 style="height: 25px;margin-top: 5px">
-                        </a>
+                        <label for="pic-src">
+                            <input type="file" id="pic-src" name="img" style="display: none;"/>
+                            <a class="btn" type="button" title="Upload Image">
+                                <img class="st_camera" src="{{ url_for('static',filename='dist/camera.png') }}"
+                                     style="height: 25px;margin-top: 5px">
+                            </a>
+                        </label>
                     </div>
                 </span>
                 <span class="input-group-btn">
-                    <button class="btn search-btn">
+                    <button class="btn search-btn" id="upload_img_submit">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     </button>
                 </span>
@@ -73,10 +76,10 @@
         </div>
     </div>
     <div class="container" class="effect-3" style="opacity: 1; position: relative; background: rgb(255, 255, 255);">
-        <div class="row">
+        <div class="row" id="img_gallery">
             <div class="col-lg-3 col-md-4 col-xs-6 thumb">
                 <a class="thumbnail" href="#">
-                    <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+                    <img class='img-responsive' src='http://placehold.it/400x300' alt=''>
                 </a>
             </div>
             <div class="col-lg-3 col-md-4 col-xs-6 thumb">
@@ -97,4 +100,5 @@
         </div>
     </div>
 {% endblock %}
+<script src="{{ url_for('static', filename='main.js') }}"></script>
 
