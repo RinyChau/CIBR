@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Narrow Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="main2.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="navbar" style="border: 0;">
+    <div class="row header">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form class="form" style="padding-top: 30px;">
+                <div class="input-group">
+                    <input type="text" class="form-control url-input" placeholder="Enter an Image Url or upload an file"
+                           aria-describedby="basic-addon2">
+                <span class="input-group-btn">
+                    <div id="clear" class="ui-widget ui-widget-content"
+                         style="height: 38px;border: 1px solid #ccc;border-left: 0;border-top-right-radius: 0;">
+                        <a class="btn" type="button" title="Upload Image">
+                            <img class="st_camera" src="dist/camera.png" style="height: 25px;margin-top: 5px">
+                        </a>
+                    </div>
+                </span>
+                <span class="input-group-btn">
+                    <button class="btn search-btn">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="subheader">
+        <div class="pxl-inner-container">
+            <div id="search_bar">
+                <ul>
+                    <li id="result_stats"></li>
+
+                    <li>
+                        <div id="expertmodebtn" class="pxl-button" onclick="pixolution.ui.toggleSearchOptions()"
+                             style="display: none;">
+                            <span>&nbsp;</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="rankmode" class="wrapper-dropdown disabled" tabindex="1" style="display: none;">
+                            <span>Choose a ranking mode</span>
+                            <ul class="dropdown">
+                                <li id="mode-visual" option="visual"><a href="#">
+                                    <div class="option-title">Visual</div>
+                                    <span class="option-text">Rank by visual appearance.</span></a></li>
+                                <li id="mode-balanced" option="balanced" class="option-active"><a href="#">
+                                    <div class="option-title">Balanced</div>
+                                    <span class="option-text">Rank by content and colors.</span></a></li>
+                                <li id="mode-semantic" option="semantic"><a href="#">
+                                    <div class="option-title">Semantic</div>
+                                    <span class="option-text">Rank by content.</span></a></li>
+                                <li id="mode-colors" option="colors"><a href="#">
+                                    <div class="option-title">Colors</div>
+                                    <span class="option-text">Rank by color scheme only.</span></a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="autocontext-container" style="display: none;" class="disabled">
+                            <input type="checkbox" id="autocontext" name="autocontext" disabled="">
+                            <label for="autocontext"><span></span>Automatically involve existing keywords</label>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" class="effect-3" style="opacity: 1; position: relative; background: rgb(255, 255, 255);">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <a class="thumbnail" href="#">
+                <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <a class="thumbnail" href="#">
+                <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <a class="thumbnail" href="#">
+                <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <a class="thumbnail" href="#">
+                <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="ie10-viewport-bug-workaround.js"></script>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
