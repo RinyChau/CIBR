@@ -50,7 +50,7 @@
 
 .header {
     background-color: white;
-    height: 113px;
+    min-height: 113px;
 }
 
 body {
