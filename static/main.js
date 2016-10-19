@@ -90,10 +90,7 @@ $(function () {
                     html_str += "<a class='thumbnail' href='#'>" + "<img class='img-responsive' src='" + data[i]["path"] + "' alt=''>" + " </a>";
                     html_str += "<div class='overlay'><h2>Label: " + data[i]['labels']['label1'] + "</h2><h2>probability: " + data[i]['labels']['prob1'] + "</h2>";
                     html_str += "<h2>Distance: " + data[i]['distance'] + "</h2>" + "</div>";
-                    html_str += "</div></div>"
-
-                    var html_str = "<div class='col-lg-3 col-md-4 col-xs-6 thumb'><a class='thumbnail' href='#'>"+"<img class='img-responsive' src='"+data[i]["path"]+"' alt=''>";
-                        " </a></div>";
+                    html_str += "</div></div>";
                     $("#img_gallery").append(html_str);
                 };
             },
