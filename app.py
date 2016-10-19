@@ -45,6 +45,8 @@ def search():
             # load the query image and describe it
             if image_file is not None and image_file.filename != '':
                 results = searchImgByFile(image_file)
+            elif image_url.startswith("/"):
+                results = searchImgByLocalFile(image_url)
             else:
                 results = searchImgByUrl(image_url)
 
@@ -68,6 +70,12 @@ def search():
             # return error
             return jsonify({"sorry": "Sorry, no results! Please try again."}), 500
 
+
+def searchImgByLocalFile(path):
+    imagePath = "app" + path
+    imgMD5 = ImgManagement.getMD5(imagePath)
+    imageItem = ImageDB.getItem({"md5": imgMD5})
+    return searcher.search_by_features(imageItem)
 
 def searchImgByFile(image_file):
     imagePath = ImgManagement.saveFile(img_dir, image_file)
