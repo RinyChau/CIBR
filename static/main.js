@@ -1,14 +1,6 @@
 $(function () {
     console.log("ready!");
 
-    $(".silimar-search").click(function () {
-        // grab image url
-        var url = $(this).attr("img-src")
-        console.log(url)
-        data = {url: url, img: null}
-        searchImg(data);
-    });
-
     $("#pic-src").change(function () {
         readURL($(this)[0]);
         uploadImg = true;
@@ -104,7 +96,17 @@ $(function () {
                     html_str += "</div>"
                     html_str += "</div></div>";
                     $("#img_gallery").append(html_str);
-                };
+                }
+                ;
+
+                $(".silimar-search").click(function () {
+                    // grab image url
+                    console.log(url)
+                    var url = $(this).attr("img-src");
+                    $('#pic-preview').attr('src', url);
+                    data = {url: url, img: null}
+                    searchImg(data);
+                });
             },
             // handle error
             error: function (error) {
