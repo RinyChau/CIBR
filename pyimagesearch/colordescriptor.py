@@ -1,10 +1,9 @@
 # import the necessary packages
 import numpy as np
 import cv2
-from enum import Enum
 
 
-class Feature(Enum):
+class Feature:
     HSV = 'HSVFeature'
     LUV = 'LUVFeature'
 

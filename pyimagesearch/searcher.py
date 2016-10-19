@@ -1,20 +1,14 @@
 # import the necessary packages
 import numpy as np
 from dao.imagedb import ImageDB
-from enum import Enum
 from colordescriptor import Feature
 from pyimagesearch.CNNClassifier import CNNClassifier
 from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
+from helper.Distance import DistanceType
 import cv2
 from helper import Labels
-
-
-class DistanceType(Enum):
-    CHISQUARE = 'ChiSquare'
-    L1 = 'L1'
-    L2 = 'L2'
 
 
 class Searcher:
@@ -31,8 +25,7 @@ class Searcher:
         phash = PHash.phash(image)
         image = np.array(image)
         labels, probs = self.classifier.predict_label_proba(image)
-        img_item = {"labels": Labels.convert_to_dic(labels, probs),
-                    self.feature_type: self.cd.describe(image),
+        img_item = {"labels": Labels.convert_to_dic(labels, probs), self.feature_type: self.cd.describe(image),
                     "PHash": phash}
         image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         # compute the descriptors with ORB

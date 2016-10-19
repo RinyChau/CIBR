@@ -4,7 +4,7 @@ import scipy.spatial.distance as dist
 import cv2
 
 
-class DistanceType(Enum):
+class DistanceType:
     CHISQUARE = 'ChiSquare'
     L1 = 'L1'
     L2 = 'L2'
