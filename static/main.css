@@ -204,3 +204,7 @@ body {
 	-webkit-transition-delay: .2s;
 	transition-delay: .2s;
 }
+
+.progress {
+	margin-bottom: 10px;
+}

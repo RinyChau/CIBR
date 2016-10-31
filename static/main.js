@@ -69,7 +69,7 @@ $(function () {
 
 
     function searchImg(data) {
-
+        $("#label_prob").html("");
         // empty/hide results
         $("#img_gallery").html("");
         //$("#results").empty();
@@ -88,7 +88,7 @@ $(function () {
                 console.log(result.results);
                 var data = result["data"];
                 var labels = result["labels"];
-                for (i = 0; i < data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
                     var html_str = "<div class='col-lg-3 col-md-4 col-xs-6 thumb'><div class='hovereffect'>";
                     html_str += "<a class='thumbnail' href='#'>" + "<img class='img-responsive' src='" + data[i]["path"] + "' alt=''>" + " </a>";
                     html_str += "<div class='overlay'><h2>Label: " + data[i]['labels']['label1'] + "</h2><h2>probability: " + data[i]['labels']['prob1'].toFixed(2) + "</h2>";
@@ -99,6 +99,17 @@ $(function () {
                     $("#img_gallery").append(html_str);
                 }
                 ;
+
+                for (var i = 0; i < 5; i++) {
+                    var label = labels["label" + i]
+                    var prob = labels["prob" + i]
+                    var html_str = "<strong style='color: #000;font-weight: initial;'>" + label + "</strong>";
+                    html_str += "<span class='pull-right' style='color: black;'>" + prob.toFixed(2) + "%</span>"
+                    html_str += '<div class="progress"> <div class="progress-bar" role="progressbar" aria-valuenow="' +
+                        Math.round(prob * 100) + '" aria-valuemin="0" aria-valuemax="100" style="width:70%">' +
+                        (prob * 100).toFixed(2) + '% </div> </div>'
+                    $("#label_prob").append(html_str);
+                }
 
                 $(".silimar-search").click(function () {
                     // grab image url
