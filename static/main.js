@@ -90,8 +90,8 @@ $(function () {
                 for (i = 0; i < data.length; i++) {
                     var html_str = "<div class='col-lg-3 col-md-4 col-xs-6 thumb'><div class='hovereffect'>";
                     html_str += "<a class='thumbnail' href='#'>" + "<img class='img-responsive' src='" + data[i]["path"] + "' alt=''>" + " </a>";
-                    html_str += "<div class='overlay'><h2>Label: " + data[i]['labels']['label1'] + "</h2><h2>probability: " + data[i]['labels']['prob1'] + "</h2>";
-                    html_str += "<h2>Distance: " + data[i]['distance'] + "</h2>"
+                    html_str += "<div class='overlay'><h2>Label: " + data[i]['labels']['label1'] + "</h2><h2>probability: " + data[i]['labels']['prob1'].toFixed(2) + "</h2>";
+                    html_str += "<h2>Distance: " + data[i]['distance'].toFixed(2) + "</h2>"
                     html_str += "<a class='info silimar-search' href='#' img-src='" + data[i]["path"] + "'>similar</a>";
                     html_str += "</div>"
                     html_str += "</div></div>";

@@ -40,6 +40,8 @@ class Searcher:
     def search_by_features(self, img_item):
         if "pre_labels" not in img_item:
             img_item["pre_labels"] = Labels.convert_to_label_array(img_item["labels"])
+        if "labels" in img_item:
+            print img_item["labels"]
         if "kp" not in img_item or "des" not in img_item:
             img_item["kp"], img_item["des"] = PicklePoints.unpickle_keypoints(img_item["ORB"])
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
