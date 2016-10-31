@@ -208,3 +208,7 @@ body {
 .progress {
 	margin-bottom: 10px;
 }
+
+#label_prob {
+	margin-top: 10px;
+}
