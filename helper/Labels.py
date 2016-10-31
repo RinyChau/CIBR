@@ -8,7 +8,7 @@ def convert_to_dic(labels, probs):
     length = len(labels)
     for i in range(length):
         label = labels[i].split(',')[0]
-        prob = probs[i]
+        prob = float(probs[i])
         rank = i + 1
         label_key = label_base.format(rank)
         prob_key = prob_base.format(rank)
