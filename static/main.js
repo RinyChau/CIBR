@@ -100,7 +100,7 @@ $(function () {
                 }
                 ;
 
-                for (var i = 0; i < 5; i++) {
+                for (var i = 1; i <= 5; i++) {
                     var label = labels["label" + i]
                     var prob = labels["prob" + i]
                     var html_str = "<strong style='color: #000;font-weight: initial;'>" + label + "</strong>";
