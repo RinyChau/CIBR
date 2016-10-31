@@ -104,10 +104,10 @@ $(function () {
                     var label = labels["label" + i]
                     var prob = labels["prob" + i]
                     var html_str = "<strong style='color: #000;font-weight: initial;'>" + label + "</strong>";
-                    html_str += "<span class='pull-right' style='color: black;'>" + prob.toFixed(2) + "%</span>"
+                    html_str += "<span class='pull-right' style='color: black;'>" + (prob * 100).toFixed(2) + "%</span>"
                     html_str += '<div class="progress"> <div class="progress-bar" role="progressbar" aria-valuenow="' +
-                        Math.round(prob * 100) + '" aria-valuemin="0" aria-valuemax="100" style="width:70%">' +
-                        (prob * 100).toFixed(2) + '% </div> </div>'
+                        Math.round(prob * 100) + '" aria-valuemin="0" aria-valuemax="100" style="width:' +
+                        Math.round(prob * 100) + '%">' + '</div> </div>'
                     $("#label_prob").append(html_str);
                 }
 
