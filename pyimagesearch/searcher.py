@@ -64,7 +64,8 @@ class Searcher:
             else:
                 image["path"] = image["Path"]
         image_list.sort(key=lambda x: x["distance"])
-        return image_list
+        return {"labels":img_item["labels"],"data":image_list}
+        # return image_list
 
     # def search(self, queryFeatures, limit=10, forceRefresh=False):
     #     results = {}

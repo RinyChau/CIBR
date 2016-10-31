@@ -86,7 +86,8 @@ $(function () {
             // handle success
             success: function (result) {
                 console.log(result.results);
-                var data = result.results;
+                var data = result["data"];
+                var labels = result["labels"];
                 for (i = 0; i < data.length; i++) {
                     var html_str = "<div class='col-lg-3 col-md-4 col-xs-6 thumb'><div class='hovereffect'>";
                     html_str += "<a class='thumbnail' href='#'>" + "<img class='img-responsive' src='" + data[i]["path"] + "' alt=''>" + " </a>";
