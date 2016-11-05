@@ -8,6 +8,7 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 from helper.Distance import DistanceType
 import cv2
+cv2.ocl.setUseOpenCL(False)
 from helper import Labels
 
 

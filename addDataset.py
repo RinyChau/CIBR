@@ -2,6 +2,7 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 import argparse
 import glob
 import cv2
+cv2.ocl.setUseOpenCL(False)
 import datetime
 import hashlib
 import numpy as np
@@ -52,7 +53,7 @@ for path, subdirs, files in os.walk(args["dataset"]):
 # use glob to grab the image paths and loop over them
 for imagePath in all_imgs:
     # extract the image ID (i.e. the unique filename) from the image
-    print(imagePath)
+    # print(imagePath)
     try:
         im = Image.open(imagePath)
         im.verify()
