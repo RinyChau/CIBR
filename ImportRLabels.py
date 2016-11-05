@@ -18,8 +18,8 @@ for imgItem in imgList:
     if "rlabels" in imgItem:
         continue
 
-    rlabels = rclf.predict_label_proba()
-    imgItem["rlabels"]
+    image_path = "." + imgItem["Path"]
+    imgItem["rlabels"] = rclf.detect(image_path)
 
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
     count += 1
