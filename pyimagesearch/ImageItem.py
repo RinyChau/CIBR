@@ -28,6 +28,7 @@ class ImageItem:
         self.orb = cv2.ORB_create()
 
     def ParseImageItem(self, imagePath):
+        cv2.ocl.setUseOpenCL(False)
         imgItem = {"md5": md5(imagePath), "ImageName": imagePath[imagePath.rfind("/") + 1:],
                    "CreateTime": datetime.datetime.utcnow(), "UpdateTime": datetime.datetime.utcnow()}
 
