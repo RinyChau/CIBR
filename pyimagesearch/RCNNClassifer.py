@@ -30,6 +30,8 @@ class RCNNClassifier:
         for i in xrange(200):
             CLASSES = CLASSES + (synsets['synsets'][0][i][2][0],)
         self._classes = CLASSES
+
+        cfg.TEST.HAS_RPN = True
         prototxt = os.path.join(os.path.join(model_root, 'VGG16', 'test.prototxt'))
         caffemodel = os.path.join(os.path.join(model_root, 'VGG16', 'vgg16_faster_rcnn_iter_80000.caffemodel'))
         caffe.set_mode_gpu()
