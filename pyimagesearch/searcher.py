@@ -2,7 +2,7 @@
 import numpy as np
 from dao.imagedb import ImageDB
 from colordescriptor import Feature
-from pyimagesearch import ImageItem
+from pyimagesearch.ImageItem import ImageItem
 from pyimagesearch.CNNClassifier import CNNClassifier
 from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
