@@ -11,7 +11,7 @@ import cv2
 import urllib
 from PIL import Image
 
-detect_dir = os.path.join('app' 'static', 'image', "tmp")
+detect_dir = os.path.join('app', 'static', 'image', "tmp")
 class ImgManagement:
 
     @staticmethod
@@ -97,4 +97,4 @@ class ImgManagement:
                         (int((bbox[0] + bbox[2]) / 2), int((bbox[1] + bbox[3]) / 2)), font, 1, (0, 0, 255), 2,
                         cv2.LINE_AA)
         cv2.imwrite(full_path, im)
-        return full_path
+        return full_path.replace("app", "")
