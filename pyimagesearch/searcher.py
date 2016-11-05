@@ -45,7 +45,7 @@ class Searcher:
 
         dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
                    + (rlabels_dis ** 2)
-        max_indices = dis_list.argsort(dis_list)[:200]
+        max_indices = np.argsort(dis_list)[:200]
         image_list = np.array(image_list)[max_indices]
         dis_list = dis_list[max_indices]
 
