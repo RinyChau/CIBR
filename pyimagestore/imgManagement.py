@@ -5,12 +5,10 @@ from werkzeug.utils import secure_filename
 
 from dao.imagedb import ImageDB
 from pyimagesearch.colordescriptor import ColorDescriptor
-from pyimagesearch.searcher import Searcher
-import urllib
 from random import randint
 import hashlib
 import cv2
-import urllib, cStringIO
+import urllib
 from PIL import Image
 
 detect_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "tmp")
