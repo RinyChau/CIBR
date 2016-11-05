@@ -15,8 +15,8 @@ start_time = time.time()
 rclf = RCNNClassifier()
 
 for imgItem in imgList:
-    if "rlabels" in imgItem:
-        continue
+    # if "rlabels" in imgItem:
+    #     continue
 
     image_path = "." + imgItem["Path"]
     imgItem["rlabels"] = rclf.detect(image_path)
