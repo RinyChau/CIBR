@@ -47,7 +47,7 @@ class RCNNClassifier:
         for i in xrange(2):
             _, _ = im_detect(self.net, im)
 
-    def detect(self, imagePath, im=None):
+    def detect(self, imagePath=None, im=None):
         if im is None:
             im = cv2.imread(imagePath)
         scores, boxes = im_detect(self.net, im)
