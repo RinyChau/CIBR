@@ -39,7 +39,7 @@ class Searcher:
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
-
+        print img_item["tags"]
         rlabels_dis = Distance.RLabel_distance(img_item["tags"], [img["tags"] for img in image_list])
         color_dis_max = max(color_dis) + 1e-10
 
