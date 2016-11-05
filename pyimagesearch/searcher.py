@@ -63,9 +63,12 @@ class Searcher:
             else:
                 image["path"] = image["Path"]
         image_list.sort(key=lambda x: x["distance"])
-
-        # detect_path = ImgManagement.saveDetectImage('app/'+image["Path"].replace("app/",""),img_item["rlabels"]["obj_list"])
-        return {"labels":img_item["labels"],"data":image_list}
+        result = {"labels": img_item["labels"], "data": image_list}
+        if len(img_item["rlabels"]["obj_list"]) > 0:
+            detect_path = ImgManagement.saveDetectImage('app/' + image["Path"].replace("app/", ""),
+                                                        img_item["rlabels"]["obj_list"])
+            result["detect_path"] = detect_path
+        return result
 
     def search_by_labels(self, queryFeatures, labels, limit=50):
         image_list = ImageDB.getListByLabels(labels=labels)

@@ -88,5 +88,15 @@ class ImgManagement:
         name = path[path.rfind("/") + 1:]
         full_path = os.path.join(dir,name)
         im = cv2.imread(path)
-        pass
 
+        for obj in obj_list:
+            bbox = obj["bbox"]
+            score = obj["prob"]
+            class_name = obj["class_name"]
+            cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 3)
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(im, '{:s} {:.3f}'.format(class_name, score),
+                        (int((bbox[0] + bbox[2]) / 2), int((bbox[1] + bbox[3]) / 2)), font, 1, (0, 0, 255), 2,
+                        cv2.LINE_AA)
+        cv2.imwrite(full_path, im)
+        return full_path
