@@ -33,7 +33,7 @@ class Searcher:
             print img_item["labels"]
         if "kp" not in img_item or "des" not in img_item:
             img_item["kp"], img_item["des"] = PicklePoints.unpickle_keypoints(img_item["ORB"])
-        image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
+        image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"], rlabels=img_item["rlabels"]["tags"].keys())
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
 
         color_dis = Distance.distance(img_item[self.feature_type],
@@ -64,6 +64,7 @@ class Searcher:
                 image["path"] = image["Path"]
         image_list.sort(key=lambda x: x["distance"])
         result = {"labels": img_item["labels"], "data": image_list}
+
         if len(img_item["rlabels"]["obj_list"]) > 0:
             detect_path = ImgManagement.saveDetectImage('app/' + image["Path"].replace("app/", ""),
                                                         img_item["rlabels"]["obj_list"])
