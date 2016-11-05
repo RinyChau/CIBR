@@ -11,6 +11,7 @@ from pyimagestore.imgManagement import ImgManagement
 from pyimagesearch.searcher import DistanceType
 from pyimagesearch.colordescriptor import Feature
 import urllib, cStringIO, thread
+from random import randint
 
 from PIL import Image
 # create flask instance
@@ -84,35 +85,34 @@ def searchImgByFile(image_file):
     imageItem = ImageDB.getItem({"md5": imgMD5})
 
     if imageItem is None:
-        image = Image.open(imagePath, 'r')
+
+        # image = Image.open(imagePath, 'r')
         # delete all upload file
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
-        return searcher.search(image)
-
-        # features = cd.describe(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
-        # labels = parse_label(classifier.predict(image))
-        # image = cv2.imread(imagePath)
-        # features = cd.describe(image)
-        # results = searcher.search(features)
+        return searcher.search(imagePath)
 
         # thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
     else:
         # delete all upload file
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
         return searcher.search_by_features(imageItem)
-        # features = imageItem[feature]
-        # top_n_array = [x for x in range(1, top_n_classes+1)]
-        # labels = [x["label"] for x in imageItem["labels"] if x["rank"] in top_n_array]
-        # results = searcher.search(features)
         # thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
 
 
 def searchImgByUrl(image_url):
-    file = cStringIO.StringIO(urllib.urlopen(image_url).read())
-    image = Image.open(file)
+    file = urllib.URLopener()
+    directory = ImgManagement.getTimeDir(img_dir)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    path = os.path.join(directory, str(randint(0, 100000000)))
+    while os.path.isfile(path):
+        path = os.path.join(directory, str(randint(0, 100000000)))
+
+    file.retrieve(image_url, path)
+    return searcher.search(path)
+
     # results = searcher.search(features)
     # thread.start_new_thread(ImgManagement.saveUrl, (image_url, img_url_dir,))
-    return searcher.search(image)
     # return results
     # pass
 

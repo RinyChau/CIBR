@@ -78,6 +78,5 @@ class ImgManagement:
         year = str(datetime.datetime.now().year)
         month = str(datetime.datetime.now().month)
         day = str(datetime.datetime.now().day)
-        hour = str(datetime.datetime.now().hour)
-        directory = os.path.join(base_dir, year, month, day, hour)
+        directory = os.path.join(base_dir, year, month, day)
         return directory

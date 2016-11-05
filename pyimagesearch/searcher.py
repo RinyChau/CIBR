@@ -2,6 +2,7 @@
 import numpy as np
 from dao.imagedb import ImageDB
 from colordescriptor import Feature
+from pyimagesearch import ImageItem
 from pyimagesearch.CNNClassifier import CNNClassifier
 from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
@@ -19,24 +20,12 @@ class Searcher:
         self.cd = ColorDescriptor(feature=feature_type)
         # initialize CNNClassifier
         self.top_n_classes = top_n_classes
-        self.classifier = CNNClassifier(self.top_n_classes)
-        self.orb = cv2.ORB_create()
 
-    def search(self, image):
-        phash = PHash.phash(image)
-        image = np.array(image)
-        labels, probs = self.classifier.predict_label_proba(image)
-        img_item = {"labels": Labels.convert_to_dic(labels, probs), self.feature_type: self.cd.describe(image),
-                    "PHash": phash}
-        image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        # compute the descriptors with ORB
-        img_item["kp"], img_item["des"] = self.orb.detectAndCompute(image_gray, None)
+        self.imgItem = ImageItem(top_n_classes=top_n_classes)
 
-        return self.search_by_features(img_item=img_item)
-        # return self.search_by_features(img_item)
-        # image_list = ImageDB.getListByLabels(labels=labels)
-        # color_dis_list = Distance.distance()
-        # pass
+    def search(self, image_path):
+        img_item = self.imgItem.ParseImageItem(image_path)
+        return self.search_by_features(img_item)
 
     def search_by_features(self, img_item):
         if "pre_labels" not in img_item:
@@ -47,6 +36,7 @@ class Searcher:
             img_item["kp"], img_item["des"] = PicklePoints.unpickle_keypoints(img_item["ORB"])
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"])
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
+
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
