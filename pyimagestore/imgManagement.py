@@ -91,7 +91,7 @@ class ImgManagement:
             bbox = obj["bbox"]
             score = obj["prob"]
             class_name = obj["class_name"]
-            cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 3)
+            cv2.rectangle(im, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (0, 255, 0), 3)
             font = cv2.FONT_HERSHEY_SIMPLEX
             cv2.putText(im, '{:s} {:.3f}'.format(class_name, score),
                         (int((bbox[0] + bbox[2]) / 2), int((bbox[1] + bbox[3]) / 2)), font, 1, (0, 0, 255), 2,

@@ -79,11 +79,11 @@ def RLabel_distance(rlabels, other_rlabels):
         for class_name in label_set:
             if class_name == "obj_list" or class_name == "tags":
                 continue
-            num_a = 0 if class_name in rlabels else rlabels[class_name]
-            num_b = 0 if class_name in other_rlabel else other_rlabel[class_name]
+            num_a = 0 if class_name not in rlabels else rlabels[class_name]
+            num_b = 0 if class_name not in other_rlabel else other_rlabel[class_name]
             common_obj += 2 * min(num_a, num_b)
             total_obj += num_a + num_b
-            sim += math.log(min(num_a, num_b)) * (1 - abs(num_a - num_b) / (num_a + num_b))
+            sim += math.log(1 + min(num_a, num_b)) * (1 - abs(num_a - num_b) / (num_a + num_b))
         sim *= (common_obj * 1.0 / total_obj)
         d.append(sim)
     dis_max = max(d) + 1e-10

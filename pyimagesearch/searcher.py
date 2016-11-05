@@ -1,7 +1,7 @@
 # import the necessary packages
 import numpy as np
 from dao.imagedb import ImageDB
-from colordescriptor import Feature
+from pyimagesearch.colordescriptor import Feature
 from pyimagesearch.ImageItem import ImageItem
 from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
@@ -11,6 +11,7 @@ import cv2
 from pyimagestore.imgManagement import ImgManagement
 cv2.ocl.setUseOpenCL(False)
 from helper import Labels
+import os
 
 
 class Searcher:
@@ -39,8 +40,7 @@ class Searcher:
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
-        print img_item["tags"]
-        rlabels_dis = Distance.RLabel_distance(img_item["tags"], [img["tags"] for img in image_list])
+        rlabels_dis = Distance.RLabel_distance(img_item['rlabels'], [img['rlabels'] for img in image_list])
         color_dis_max = max(color_dis) + 1e-10
 
         dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
@@ -62,11 +62,15 @@ class Searcher:
                 image["path"] = image["ImageUrl"]
             else:
                 image["path"] = image["Path"]
+        image_list = [image for image in image_list]
         image_list.sort(key=lambda x: x["distance"])
         result = {"labels": img_item["labels"], "data": image_list}
 
         if len(img_item["rlabels"]["obj_list"]) > 0:
-            detect_path = ImgManagement.saveDetectImage('app/' + image["Path"].replace("app/", ""),
+            path = image["Path"].replace("app/", "")
+            if path.startswith('/'):
+                path = path[1:]
+            detect_path = ImgManagement.saveDetectImage(os.path.join('app', path),
                                                         img_item["rlabels"]["obj_list"])
             result["detect_path"] = detect_path
         return result
