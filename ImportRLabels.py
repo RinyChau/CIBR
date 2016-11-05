@@ -19,6 +19,7 @@ for imgItem in imgList:
     if "rlabels" in imgItem:
         del imgItem["rlabels"]
         collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+        count += 1
         continue
     else:
         continue
