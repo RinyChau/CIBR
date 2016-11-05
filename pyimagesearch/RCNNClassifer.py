@@ -69,6 +69,12 @@ class RCNNClassifier:
                 else:
                     result[class_name] = 1
                 result["obj_list"].append({"class_name": class_name, "prob": score, "bbox": dets[i, :4]})
-                if class_name not in result["tags"]:
-                    result["tags"][class_name] = 1
+
+                exist = False
+                for tag in result["tags"]:
+                    if class_name in tag:
+                        exist = True
+                        break
+                if not exist:
+                    result["tags"].append({class_name: 1})
         return result
