@@ -39,12 +39,21 @@ class Searcher:
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
         phash_dis = Distance.l1_distance(img_item["PHash"], [img["PHash"] for img in image_list])
+
+        rlabels_dis = Distance.RLabel_distance(img_item["tags"], [img["tags"] for img in image_list])
+        color_dis_max = max(color_dis) + 1e-10
+
+        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
+                   + (rlabels_dis ** 2)
+        max_indices = dis_list.argsort(dis_list)[:200]
+        image_list = np.array(image_list)[max_indices]
+        dis_list = dis_list[max_indices]
+
         orb_dis = Distance.orb_distance((img_item["kp"], img_item["des"]),
                                         [PicklePoints.unpickle_keypoints(x["ORB"]) for x in image_list])
-        color_dis_max = max(color_dis) + 1e-10
-        orb_dis_max = max(orb_dis)
-        dis_list = ((np.array(color_dis) / color_dis_max) ** 2) + (((np.array(phash_dis) * 1.0) / 64) ** 2) \
-                   + ((np.array(orb_dis) * 1.0 / orb_dis_max) ** 2)
+        orb_dis_max = max(orb_dis) + 1e-10
+        dis_list += ((np.array(orb_dis) * 1.0 / orb_dis_max) ** 2)
+
         list_len = len(image_list)
         for i in range(list_len):
             image = image_list[i]

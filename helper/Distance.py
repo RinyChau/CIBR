@@ -2,6 +2,8 @@ from enum import Enum
 import numpy as np
 import scipy.spatial.distance as dist
 import cv2
+import math
+import time
 
 
 class DistanceType:
@@ -63,4 +65,29 @@ def orb_distance(kp_des, other_kp_dess):
 def l1_distance(query_hist, other_hists):
     d = [dist.cityblock(query_hist, other_hist) for other_hist in other_hists]
     # d = np.sum([abs(a - b) for (a, b) in zip(query_hist, other_hists)])
+    return d
+
+
+def RLabel_distance(rlabels, other_rlabels):
+    start_time = time.time()
+    d = []
+    for other_rlabel in other_rlabels:
+        label_set = set(rlabels.keys()).union(other_rlabel.keys())
+        sim = 0
+        common_obj = 0
+        total_obj = 0
+        for class_name in label_set:
+            if class_name == "obj_list" or class_name == "tags":
+                continue
+            num_a = 0 if class_name in rlabels else rlabels[class_name]
+            num_b = 0 if class_name in other_rlabel else other_rlabel[class_name]
+            common_obj += 2 * min(num_a, num_b)
+            total_obj += num_a + num_b
+            sim += math.log(min(num_a, num_b)) * (1 - abs(num_a - num_b) / (num_a + num_b))
+        sim *= (common_obj * 1.0 / total_obj)
+        d.append(sim)
+    dis_max = max(d) + 1e-10
+    d = 1 - (np.array(d) / dis_max)
+    print("count {}".format(len(d)))
+    print(" --- %s seconds ---" % (time.time() - start_time))
     return d
