@@ -68,7 +68,8 @@ class RCNNClassifier:
                     result[class_name] += 1
                 else:
                     result[class_name] = 1
-                result["obj_list"].append({"class_name": class_name, "prob": score, "bbox": dets[i, :4]})
+                result["obj_list"].append(
+                    {"class_name": class_name, "prob": float(score), "bbox": [float(x) for x in dets[i, :4]]})
 
                 exist = False
                 for tag in result["tags"]:
