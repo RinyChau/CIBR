@@ -7,7 +7,9 @@ from pyimagesearch.colordescriptor import Feature
 import imagehash
 from helper import PicklePoints, Labels
 from pyimagesearch.CNNClassifier import CNNClassifier
+from pyimagesearch.RCNNClassifer import RCNNClassifier
 import cv2
+
 
 cv2.ocl.setUseOpenCL(False)
 
@@ -26,6 +28,7 @@ class ImageItem:
         self.luv_cd = ColorDescriptor(feature=Feature.LUV)
         self.clf = CNNClassifier(top_n_classes=top_n_classes)
         self.orb = cv2.ORB_create()
+        self.rclf = RCNNClassifier()
 
     def ParseImageItem(self, imagePath):
         cv2.ocl.setUseOpenCL(False)
@@ -43,6 +46,11 @@ class ImageItem:
         # CNN labels
         labels, probs = self.clf.predict_label_proba(image)
         imgItem["labels"] = Labels.convert_to_dic(labels, probs)
+
+        # rcnn labels
+        bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        imgItem["rlabels"] = self.rclf.detect(im=bgr_image)
+
 
         # ORB
         gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
