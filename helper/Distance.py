@@ -2,7 +2,7 @@ from enum import Enum
 import numpy as np
 import scipy.spatial.distance as dist
 import cv2
-
+cv2.ocl.setUseOpenCL(False)
 
 class DistanceType:
     CHISQUARE = 'ChiSquare'
@@ -32,6 +32,7 @@ MAX_DISTANCE = 128
 
 
 def orb_distance(kp_des, other_kp_dess):
+    cv2.ocl.setUseOpenCL(False)
     index_params = dict(algorithm=6, table_number=12, key_size=20, multi_probe_level=2)
     search_params = dict(checks=50)  # or pass empty dictionary
     flann = cv2.FlannBasedMatcher(index_params, search_params)

@@ -8,12 +8,12 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 from helper.Distance import DistanceType
 import cv2
-cv2.ocl.setUseOpenCL(False)
 from helper import Labels
 
 
 class Searcher:
     def __init__(self, dis_type=DistanceType.CHISQUARE, feature_type=Feature.HSV, top_n_classes=2):
+        cv2.ocl.setUseOpenCL(False)
         self.dis_type = dis_type
         self.feature_type = feature_type
         self.cd = ColorDescriptor(feature=feature_type)
@@ -23,6 +23,7 @@ class Searcher:
         self.orb = cv2.ORB_create()
 
     def search(self, image):
+        cv2.ocl.setUseOpenCL(False)
         phash = PHash.phash(image)
         image = np.array(image)
         labels, probs = self.classifier.predict_label_proba(image)
