@@ -1,5 +1,3 @@
-import sys
-sys.path.append("app/dist/sklearn_theano-0.0.1-py2.7.egg")
 from sklearn_theano.feature_extraction import GoogLeNetClassifier
 import cv2
 

@@ -8,6 +8,7 @@ from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
 from helper.Distance import DistanceType
 import cv2
+from pyimagestore.imgManagement import ImgManagement
 cv2.ocl.setUseOpenCL(False)
 from helper import Labels
 
@@ -19,7 +20,6 @@ class Searcher:
         self.cd = ColorDescriptor(feature=feature_type)
         # initialize CNNClassifier
         self.top_n_classes = top_n_classes
-
         self.imgItem = ImageItem(top_n_classes=top_n_classes)
 
     def search(self, image_path):
@@ -63,6 +63,8 @@ class Searcher:
             else:
                 image["path"] = image["Path"]
         image_list.sort(key=lambda x: x["distance"])
+
+        # detect_path = ImgManagement.saveDetectImage('app/'+image["Path"].replace("app/",""),img_item["rlabels"]["obj_list"])
         return {"labels":img_item["labels"],"data":image_list}
 
     def search_by_labels(self, queryFeatures, labels, limit=50):

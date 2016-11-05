@@ -13,6 +13,7 @@ import cv2
 import urllib, cStringIO
 from PIL import Image
 
+detect_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "tmp")
 class ImgManagement:
 
     @staticmethod
@@ -80,3 +81,12 @@ class ImgManagement:
         day = str(datetime.datetime.now().day)
         directory = os.path.join(base_dir, year, month, day)
         return directory
+
+    @staticmethod
+    def saveDetectImage(path,obj_list):
+        dir = ImgManagement.getTimeDir(detect_dir)
+        name = path[path.rfind("/") + 1:]
+        full_path = os.path.join(dir,name)
+        im = cv2.imread(path)
+        pass
+
