@@ -33,7 +33,7 @@ class ImageDB:
             # dbQuery = {"$and":[{"labels.label":label,"top_n_prob":1} for label in labels]}
             dbQuery = {"labels.label1": {"$in": labels}}
 
-            if len(rlabels > 0):
+            if len(rlabels) > 2:
                 tags = [{"rlabels.tags": {rlabel: 1}} for rlabel in rlabels]
                 tags = tags.append(dbQuery)
                 dbQuery = {"$or": tags}
