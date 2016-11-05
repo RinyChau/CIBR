@@ -88,8 +88,9 @@ def searchImgByFile(image_file):
 
         # image = Image.open(imagePath, 'r')
         # delete all upload file
+        result = searcher.search(imagePath)
         thread.start_new_thread(ImgManagement.deleteFile, (imagePath,))
-        return searcher.search(imagePath)
+        return result
 
         # thread.start_new_thread(ImageDB.insert, (imgMD5, features, imagePath,))
     else:

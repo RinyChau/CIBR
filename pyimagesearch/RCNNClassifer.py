@@ -20,7 +20,7 @@ import scipy.io as sio
 import caffe, os, sys, cv2
 
 
-class CNNClassifier:
+class RCNNClassifier:
     def __init__(self, CONF_THRESH=0.8, NMS_THRESH=0.3):
         self._conf_thres = CONF_THRESH
         self._nms_thresh = NMS_THRESH
@@ -69,59 +69,3 @@ class CNNClassifier:
                 if class_name not in result["tags"]:
                     result["tags"][class_name] = 1
             return result
-
-    def predict(self, X):
-        res = cv2.resize(X, (231, 231), interpolation=cv2.INTER_LINEAR)
-        labels = self.clf.predict(res).ravel()[::-1]
-        return labels
-
-    def predict_proba(self, X):
-        res = cv2.resize(X, (231, 231), interpolation=cv2.INTER_LINEAR)
-        probs = self.clf.predict_proba(res).ravel()[::-1]
-        return probs
-
-    def predict_label_proba(self, X):
-        res = cv2.resize(X, (231, 231), interpolation=cv2.INTER_LINEAR)
-        labels = self.clf.predict(res).ravel()[::-1]
-        probs = self.clf.predict_proba(res).ravel()[::-1]
-        return labels, probs
-
-
-def vis_detections(image_name, im, class_name, dets, thresh=0.5):
-    """Draw detected bounding boxes."""
-    inds = np.where(dets[:, -1] >= thresh)[0]
-    if len(inds) == 0:
-        return
-
-    # im = im[:, :, (2, 1, 0)]
-    # fig, ax = plt.subplots(figsize=(12, 12))
-    # ax.imshow(im, aspect='equal')
-    for i in inds:
-        bbox = dets[i, :4]
-        score = dets[i, -1]
-        cv2.rectangle(im, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 3)
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(im, '{:s} {:.3f}'.format(class_name, score), (int(bbox[0]), int(bbox[1] - 2)), font, 1, (0, 0, 255),
-                    2, cv2.LINE_AA)
-        # ax.add_patch(
-        #    plt.Rectangle((bbox[0], bbox[1]),
-        #                  bbox[2] - bbox[0],
-        #                  bbox[3] - bbox[1], fill=False,
-        #                  edgecolor='red', linewidth=3.5)
-        #    )
-        # ax.text(bbox[0], bbox[1] - 2,
-        #        '{:s} {:.3f}'.format(class_name, score),
-        #        bbox=dict(facecolor='blue', alpha=0.5),
-        #        fontsize=14, color='white')
-
-    # ax.set_title(('{} detections with '
-    #             'p({} | box) >= {:.1f}').format(class_name, class_name,
-    #                                              thresh),
-    #              fontsize=14)
-    # plt.axis('off')
-    # plt.tight_layout()
-    # plt.draw()
-    # save the image
-    # fig = plt.gcf()
-    # fig.savefig("output_"+image_name)
-    cv2.imwrite("output_" + image_name, im)
