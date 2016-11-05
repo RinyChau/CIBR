@@ -37,14 +37,15 @@ class RCNNClassifier:
         caffe.set_mode_gpu()
         caffe.set_device(0)
         cfg.GPU_ID = 0
-        net = caffe.Net(prototxt, caffemodel, caffe.TEST)
+
+        self.net = caffe.Net(prototxt, caffemodel, caffe.TEST)
 
         print '\n\nLoaded network'
         im = 128 * np.ones((300, 500, 3), dtype=np.uint8)
 
         # Warm up on a dummy image
         for i in xrange(2):
-            _, _ = im_detect(net, im)
+            _, _ = im_detect(self.net, im)
 
     def detect(self, imagePath):
 
