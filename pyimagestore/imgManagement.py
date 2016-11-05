@@ -85,6 +85,8 @@ class ImgManagement:
         dir = ImgManagement.getTimeDir(detect_dir)
         name = path[path.rfind("/") + 1:]
         full_path = os.path.join(dir,name)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
         im = cv2.imread(path)
 
         for obj in obj_list:
