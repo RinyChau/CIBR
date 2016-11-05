@@ -3,7 +3,6 @@ import numpy as np
 from dao.imagedb import ImageDB
 from colordescriptor import Feature
 from pyimagesearch.ImageItem import ImageItem
-from pyimagesearch.CNNClassifier import CNNClassifier
 from helper import Distance, PHash
 from pyimagesearch.colordescriptor import ColorDescriptor
 from helper import PicklePoints
@@ -56,22 +55,6 @@ class Searcher:
                 image["path"] = image["Path"]
         image_list.sort(key=lambda x: x["distance"])
         return {"labels":img_item["labels"],"data":image_list}
-        # return image_list
-
-    # def search(self, queryFeatures, limit=10, forceRefresh=False):
-    #     results = {}
-    #     image_list = ImageDB.getList(force_refresh=forceRefresh)
-    #     for image in image_list:
-    #         if self.feature_type in image:
-    #             features = image[self.feature_type]
-    #             distance = self.distance(features, queryFeatures)
-    #             if "ImageUrl" in image:
-    #                 results[image["ImageUrl"]] = distance
-    #             else:
-    #                 results[image["Path"]] = distance
-    #     results = sorted([v, k] for (k,v) in results.items())
-    #
-    #     return results[:limit]
 
     def search_by_labels(self, queryFeatures, labels, limit=50):
         image_list = ImageDB.getListByLabels(labels=labels)
@@ -89,12 +72,3 @@ class Searcher:
 
         return results[:limit]
 
-# def parse_label(labels):
-#     label_list = []
-#     # top_n_prob = 0
-#     for tags in reversed(labels.ravel()):
-#         label_list.append(tags[:tags.index(',')] if ',' in tags else tags)
-#         # for tag in tags.split(","):
-#         #     label_list.append(tag)
-#         #     label.append({"label": tag, "top_n_prob": top_n_prob})
-#     return label_list
