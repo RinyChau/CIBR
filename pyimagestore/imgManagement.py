@@ -11,7 +11,7 @@ import cv2
 import urllib
 from PIL import Image
 
-detect_dir = os.path.join(os.path.dirname(__file__), 'static', 'image', "tmp")
+detect_dir = os.path.join('app' 'static', 'image', "tmp")
 class ImgManagement:
 
     @staticmethod
