@@ -72,13 +72,11 @@ def RLabel_distance(rlabels, other_rlabels):
     start_time = time.time()
     d = []
     for other_rlabel in other_rlabels:
-        label_set = set(rlabels.keys()).union(other_rlabel.keys())
+        label_set = set(rlabels["tags"]).union(other_rlabel["tags"])
         sim = 0
         common_obj = 0
         total_obj = 0
         for class_name in label_set:
-            if class_name == "obj_list" or class_name == "tags":
-                continue
             num_a = 0 if class_name not in rlabels else rlabels[class_name]
             num_b = 0 if class_name not in other_rlabel else other_rlabel[class_name]
             common_obj += 2 * min(num_a, num_b)

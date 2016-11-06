@@ -34,8 +34,7 @@ class ImageDB:
             dbQuery = {"labels.label1": {"$in": labels}}
 
             if len(rlabels) > 2:
-                tags = [{"rlabels.tags": {rlabel: 1}} for rlabel in rlabels]
-                tags.append(dbQuery)
+                tags = [{"rlabels.tags": {"$in": rlabels}}, dbQuery]
                 dbQuery = {"$or": tags}
                 print dbQuery
 
