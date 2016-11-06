@@ -38,7 +38,7 @@ class Searcher:
         multi_obj = len(img_item["rlabels"]["obj_list"]) > 1
         image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"], rlabels=img_item["rlabels"]["tags"],
                                              multiObj=multi_obj)
-        image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
+        image_list = [x for x in image_list if "PHash" in x and self.feature_type in x]
 
         color_dis = Distance.distance(img_item[self.feature_type],
                                       [img[self.feature_type] for img in image_list], self.dis_type)
