@@ -77,5 +77,5 @@ class RCNNClassifier:
                         exist = True
                         break
                 if not exist:
-                    result["tags"].append({class_name: 1})
+                    result["tags"].append(class_name)
         return result
