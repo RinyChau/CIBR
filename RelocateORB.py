@@ -15,7 +15,7 @@ count = 0
 start_time = time.time()
 
 for imgItem in imgList:
-    newItem = {'_id': imgItem["_id"], 'md5': imgItem['md5'], 'ORB': imgItem['md5']}
+    newItem = {'_id': imgItem["_id"], 'md5': imgItem['md5'], 'ORB': imgItem['ORB']}
     newCollection.insert_one(newItem)
     del imgItem['ORB']
     collection.replace_one({"_id": imgItem["_id"]}, imgItem)
