@@ -11,7 +11,8 @@ import cv2
 import urllib
 from PIL import Image
 
-detect_dir = os.path.join('app', 'static', 'image', "tmp")
+relative_dir = os.path.join('static', 'image', "tmp")
+detect_dir = os.path.join('/home/liulu/lin/app/app', relative_dir)
 class ImgManagement:
 
     @staticmethod
@@ -85,6 +86,7 @@ class ImgManagement:
         dir = ImgManagement.getTimeDir(detect_dir)
         name = path[path.rfind("/") + 1:]
         full_path = os.path.join(dir,name)
+        rel_path = os.path.join(relative_dir, name)
         if not os.path.exists(dir):
             os.makedirs(dir)
         im = cv2.imread(path)
@@ -99,4 +101,4 @@ class ImgManagement:
                         (int((bbox[0] + bbox[2]) / 2), int((bbox[1] + bbox[3]) / 2)), font, 1, (0, 0, 255), 2,
                         cv2.LINE_AA)
         cv2.imwrite(full_path, im)
-        return full_path.replace("app", "")
+        return "/" + rel_path
