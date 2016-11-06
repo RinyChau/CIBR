@@ -35,7 +35,9 @@ class Searcher:
             print img_item["labels"]
         if "kp" not in img_item or "des" not in img_item:
             img_item["kp"], img_item["des"] = PicklePoints.unpickle_keypoints(img_item["ORB"])
-        image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"], rlabels=img_item["rlabels"]["tags"])
+        multi_obj = len(img_item["rlabels"]["obj_list"]) > 1
+        image_list = ImageDB.getListByLabels(labels=img_item["pre_labels"], rlabels=img_item["rlabels"]["tags"],
+                                             multiObj=len(multi_obj))
         image_list = [x for x in image_list if "PHash" in x and self.feature_type in x and "ORB" in x]
 
         color_dis = Distance.distance(img_item[self.feature_type],

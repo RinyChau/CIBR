@@ -88,6 +88,15 @@ $(function () {
                 console.log(result);
                 var data = result["data"];
                 var labels = result["labels"];
+                if (result.hasOwnProperty('det_path')) {
+                    var path = result['det_path']
+                    var html_str = '<div>';
+                    html_str += "<img src='" + path + "' style='max-height: 600px;margin-left: auto;max-width: 600px;margin-right: auto;display: block;' >";
+                    html_str += '</div>'
+                    $("#img_gallery").append(html_str);
+                }
+
+
                 for (var i = 0; i < data.length; i++) {
                     var html_str = "<div class='col-lg-3 col-md-4 col-xs-6 thumb'><div class='hovereffect'>";
                     html_str += "<a class='thumbnail' href='#'>" + "<img class='img-responsive' src='" + data[i]["path"] + "' alt=''>" + " </a>";

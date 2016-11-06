@@ -28,12 +28,12 @@ class ImageDB:
             raise
 
     @staticmethod
-    def getListByLabels(labels, rlabels=[]):
+    def getListByLabels(labels, rlabels=[], multiObj=False):
         try:
             # dbQuery = {"$and":[{"labels.label":label,"top_n_prob":1} for label in labels]}
             dbQuery = {"labels.label1": {"$in": labels}}
 
-            if len(rlabels) > 2:
+            if multiObj:
                 tags = [{"rlabels.tags": {"$in": rlabels}}, dbQuery]
                 dbQuery = {"$or": tags}
                 print dbQuery
