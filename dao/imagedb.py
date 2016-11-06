@@ -64,6 +64,8 @@ class ImageDB:
     @staticmethod
     def getItem(param, force_refresh=False):
         item = ImageDB.collection.find_one(param)
+        orb_item = ImageDB.orb_col.find_one(param)
+        item["ORB"] = orb_item["ORB"]
         return item
 
     @staticmethod
