@@ -93,3 +93,24 @@ class ImageDB:
             print(sys.exc_info()[0])
             traceback.print_exc()
             print("*** ImageDB insert takes error ***")
+
+    @staticmethod
+    def insert_one(imgItem):
+        imgItem["delete"] = True
+        orbfeature = imgItem["ORB"]
+        del imgItem['ORB']
+
+        # insert first
+        ImageDB.collection.insert_one(imgItem)
+        imgItem = ImageDB.collection.find_one({'md5': imgItem['md5']})
+
+        # insert second
+        newItem = {'_id': imgItem["_id"], 'md5': imgItem['md5'], 'ORB': orbfeature}
+        ImageDB.orb_col.insert_one(newItem)
+
+        # replace first
+        del imgItem["delete"]
+        ImageDB.collection.replace_one({"_id": imgItem["_id"]}, imgItem)
+
+        imgItem['ORB'] = orbfeature
+        return

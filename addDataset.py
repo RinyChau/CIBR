@@ -1,3 +1,4 @@
+from dao.imagedb import ImageDB
 from pyimagesearch.colordescriptor import ColorDescriptor
 import argparse
 import glob
@@ -79,7 +80,8 @@ for imagePath in all_imgs:
         continue
     imgObj["Path"] = "/" + imagePath
     # print(imgObj)
-    collection.insert_one(imgObj)
+    ImageDB.insert_one(imgObj)
+    # collection.insert_one(imgObj)
 
     count += 1
     if count % 100 == 0:
