@@ -12,7 +12,7 @@ import urllib
 from PIL import Image
 
 relative_dir = os.path.join('static', 'image', "tmp")
-detect_dir = os.path.join('/home/liulu/lin/app/app', relative_dir)
+detect_dir = os.path.join('/home/liulu/lin/app/', relative_dir)
 class ImgManagement:
 
     @staticmethod
