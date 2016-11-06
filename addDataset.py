@@ -76,6 +76,7 @@ for imagePath in all_imgs:
     except Exception, e:
         print e
         print("cannot get image" + imagePath)
+        continue
     imgObj["Path"] = "/" + imagePath
     # print(imgObj)
     collection.insert_one(imgObj)
