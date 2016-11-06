@@ -9,6 +9,7 @@ class ImageDB:
     client = MongoClient("127.0.0.1")
     db = client.CIBR
     collection = db.ImageFeature
+    orb_col = db.ORBFeature
 
     @staticmethod
     def getList(force_refresh=False):
@@ -46,6 +47,18 @@ class ImageDB:
             traceback.print_exc()
             print("*** ImageDB getListByLabels takes error ***")
             raise
+
+    @staticmethod
+    def getORB(ids):
+        try:
+            return ImageDB.orb_col.find({"_id": {"$in": ids}})
+        except:
+            print("*** ImageDB getORB takes error ***")
+            print(sys.exc_info()[0])
+            traceback.print_exc()
+            print("*** ImageDB getORB takes error ***")
+            raise
+
 
 
     @staticmethod

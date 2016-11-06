@@ -52,10 +52,20 @@ class Searcher:
         image_list = np.array(image_list)[max_indices]
         dis_list = dis_list[max_indices]
 
-        # orb_dis = Distance.orb_distance((img_item["kp"], img_item["des"]),
-        #                                 [PicklePoints.unpickle_keypoints(x["ORB"]) for x in image_list])
-        # orb_dis_max = max(orb_dis) + 1e-10
-        # dis_list += ((np.array(orb_dis) * 1.0 / orb_dis_max) ** 2)
+        ids = []
+        md5_image = {}
+        for image in image_list:
+            md5_image[image["md5"]] = image
+            ids.append(image["_id"])
+        orb_list = ImageDB.getORB(ids)
+
+        for orb_item in orb_list:
+            md5_image[orb_item['md5']]['ORB'] = orb_item['ORB']
+
+        orb_dis = Distance.orb_distance((img_item["kp"], img_item["des"]),
+                                        [PicklePoints.unpickle_keypoints(x["ORB"]) for x in image_list])
+        orb_dis_max = max(orb_dis) + 1e-10
+        dis_list += ((np.array(orb_dis) * 1.0 / orb_dis_max) ** 2)
 
         list_len = len(image_list)
         for i in range(list_len):
