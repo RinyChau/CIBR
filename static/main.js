@@ -88,7 +88,7 @@ $(function () {
                 console.log(result);
                 var data = result["data"];
                 var labels = result["labels"];
-                if (result.hasOwnProperty('det_path')) {
+                if (result.hasOwnProperty('det_path') && result['det_path'] != null) {
                     var path = result['det_path']
                     var html_str = '<div>';
                     html_str += "<img src='" + path + "' style='max-height: 600px;margin-left: auto;max-width: 600px;margin-right: auto;display: block;' >";
