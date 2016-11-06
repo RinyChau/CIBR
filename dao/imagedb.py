@@ -65,7 +65,8 @@ class ImageDB:
     def getItem(param, force_refresh=False):
         item = ImageDB.collection.find_one(param)
         orb_item = ImageDB.orb_col.find_one(param)
-        item["ORB"] = orb_item["ORB"]
+        if item is not None and orb_item is not None:
+            item["ORB"] = orb_item["ORB"]
         return item
 
     @staticmethod
