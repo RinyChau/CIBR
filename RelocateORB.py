@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 import time
-from pyimagesearch.RCNNClassifer import RCNNClassifier
 
 # initialize mongodb client
 client = MongoClient()
