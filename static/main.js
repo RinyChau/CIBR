@@ -85,7 +85,7 @@ $(function () {
             data: data,
             // handle success
             success: function (result) {
-                console.log(result.results);
+                console.log(result);
                 var data = result["data"];
                 var labels = result["labels"];
                 for (var i = 0; i < data.length; i++) {
