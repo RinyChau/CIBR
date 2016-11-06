@@ -25,6 +25,7 @@ class Searcher:
 
     def search(self, image_path):
         img_item = self.imgItem.ParseImageItem(image_path)
+        img_item["Path"] = image_path
         return self.search_by_features(img_item)
 
     def search_by_features(self, img_item):
