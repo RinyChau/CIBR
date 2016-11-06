@@ -82,7 +82,7 @@ def RLabel_distance(rlabels, other_rlabels):
             common_obj += 2 * min(num_a, num_b)
             total_obj += num_a + num_b
             sim += math.log(1 + min(num_a, num_b)) * (1 - abs(num_a - num_b) / (num_a + num_b))
-        sim *= (common_obj * 1.0 / total_obj)
+        sim *= (common_obj * 1.0 / (total_obj + 1e-10))
         d.append(sim)
     dis_max = max(d) + 1e-10
     d = 1 - (np.array(d) / dis_max)
