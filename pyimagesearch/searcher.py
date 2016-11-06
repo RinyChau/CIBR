@@ -67,7 +67,7 @@ class Searcher:
         result = {"labels": img_item["labels"], "data": image_list}
 
         if len(img_item["rlabels"]["obj_list"]) > 0:
-            path = image["Path"].replace("app/", "")
+            path = img_item["Path"].replace("app/", "")
             if path.startswith('/'):
                 path = path[1:]
             detect_path = ImgManagement.saveDetectImage(os.path.join('app', path),
