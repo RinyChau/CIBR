@@ -71,7 +71,11 @@ for imagePath in all_imgs:
         print("same image" + imagePath)
         continue
 
-    imgObj = imageItem.ParseImageItem(imagePath)
+    try:
+        imgObj = imageItem.ParseImageItem(imagePath)
+    except Exception, e:
+        print e
+        print("cannot get image" + imagePath)
     imgObj["Path"] = "/" + imagePath
     # print(imgObj)
     collection.insert_one(imgObj)
